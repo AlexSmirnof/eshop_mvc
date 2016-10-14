@@ -58,13 +58,13 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-.gitignore
-domain/src/test/
-out/
-service/src/main/resources/
-service/src/test/
-src/
-webview/src/main/resources/
-webview/src/main/webapp/WEB-INF/css/
-webview/src/main/webapp/WEB-INF/js/
-webview/src/main/webapp/WEB-INF/tags/
+#.gitignore
+#domain/src/test/
+#out/
+#service/src/main/resources/
+#service/src/test/
+#src/
+#webview/src/main/resources/
+#webview/src/main/webapp/WEB-INF/css/
+#webview/src/main/webapp/WEB-INF/js/
+#webview/src/main/webapp/WEB-INF/tags/
