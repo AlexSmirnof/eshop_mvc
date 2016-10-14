@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <bean id="phoneDao" class="ex.soft.domain.dao.jdbc.JdbcPhoneDao">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="orderDao" class="ex.soft.domain.dao.jdbc.JdbcOrderDao">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="phoneDao" ref="phoneDao"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.hsqldb.driverClass}"/>
+        <property name="url" value="${jdbc.hsqldb.url}"/>
+        <property name="username" value="${jdbc.hsqldb.username}"/>
+        <property name="password" value="${jdbc.hsqldb.password}"/>
+        <!--<property name="initialSize" value="2"></property>-->
+        <!--<property name="maxActive" value="5"></property>-->
+    </bean>
+
+    <context:property-placeholder location="classpath:/db/db.properties"/>
+
+    <!--<jdbc:initialize-database data-source="dataSource" enabled="#{systemProperties.INITIALIZE_DATABASE}">-->
+        <!--<jdbc:script location="classpath:/db/schema.sql"/>-->
+        <!--<jdbc:script location="classpath:/db/test-data.sql"/>-->
+    <!--</jdbc:initialize-database>-->
+
+
+</beans>
