@@ -9,14 +9,24 @@ import java.util.List;
 public class Order {
 
     private Long key;
-    private List<OrderItem> orderItems;
-    private BigDecimal totalPrice;
     private String firstName;
     private String lastName;
     private String deliveryAddress;
     private String contactPhoneNo;
+    private BigDecimal totalPrice;
+    private List<OrderItem> orderItems;
 
     public Order() {}
+
+    public Order(Long key, String firstName, String lastName, String deliveryAddress, String contactPhoneNo, BigDecimal totalPrice, List<OrderItem> orderItems) {
+        this.key = key;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.deliveryAddress = deliveryAddress;
+        this.contactPhoneNo = contactPhoneNo;
+        this.totalPrice = totalPrice;
+        this.orderItems = orderItems;
+    }
 
     public Long getKey() {
         return key;
@@ -81,39 +91,24 @@ public class Order {
 
         Order that = (Order) o;
 
-        if (key != null ? !key.equals(that.key) : that.key != null) return false;
-        if (orderItems != null ? !orderItems.equals(that.orderItems) : that.orderItems != null) return false;
-        if (totalPrice != null ? !totalPrice.equals(that.totalPrice) : that.totalPrice != null) return false;
-        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-        if (deliveryAddress != null ? !deliveryAddress.equals(that.deliveryAddress) : that.deliveryAddress != null)
-            return false;
-        return contactPhoneNo != null ? contactPhoneNo.equals(that.contactPhoneNo) : that.contactPhoneNo == null;
-
+        return key != null ? key.equals(that.key) : false;
     }
 
     @Override
     public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (orderItems != null ? orderItems.hashCode() : 0);
-        result = 31 * result + (totalPrice != null ? totalPrice.hashCode() : 0);
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (deliveryAddress != null ? deliveryAddress.hashCode() : 0);
-        result = 31 * result + (contactPhoneNo != null ? contactPhoneNo.hashCode() : 0);
-        return result;
+        return key != null ? key.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return "Order{" +
                 "key=" + key +
-                ", orderItems=" + orderItems +
-                ", totalPrice=" + totalPrice +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", contactPhoneNo='" + contactPhoneNo + '\'' +
+                ", totalPrice=" + totalPrice +
+                ", orderItems=" + orderItems +
                 '}';
     }
 }

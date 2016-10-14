@@ -9,14 +9,34 @@ public class Phone {
 
     private Long key;
     private String model;
+    private String color;
+    private String displaySize;
     private BigDecimal price;
 
     public Phone() {}
 
-    public Phone(Long key, String model, BigDecimal price) {
+    public Phone(Long key, String model, String color, String displaySize, BigDecimal price) {
         this.key = key;
         this.model = model;
+        this.color = color;
+        this.displaySize = displaySize;
         this.price = price;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getDisplaySize() {
+        return displaySize;
+    }
+
+    public void setDisplaySize(String displaySize) {
+        this.displaySize = displaySize;
     }
 
     public Long getKey() {
@@ -50,18 +70,12 @@ public class Phone {
 
         Phone that = (Phone) o;
 
-        if (key != null ? !key.equals(that.key) : that.key != null) return false;
-        if (model != null ? !model.equals(that.model) : that.model != null) return false;
-        return price != null ? price.equals(that.price) : that.price == null;
-
+        return key != null ? key.equals(that.key) : false;
     }
 
     @Override
     public int hashCode() {
-        int result = key != null ? key.hashCode() : 0;
-        result = 31 * result + (model != null ? model.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        return result;
+        return key != null ? key.hashCode() : 0;
     }
 
     @Override
@@ -69,6 +83,8 @@ public class Phone {
         return "Phone{" +
                 "key=" + key +
                 ", model='" + model + '\'' +
+                ", color='" + color + '\'' +
+                ", displaySize='" + displaySize + '\'' +
                 ", price=" + price +
                 '}';
     }

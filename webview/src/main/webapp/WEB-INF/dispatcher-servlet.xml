@@ -13,8 +13,8 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <bean id="phoneService" class="ex.soft.service.manager.PhoneService"/>
-    <bean id="orderService" class="ex.soft.service.manager.OrderService"/>
+    <!--<bean id="phoneService" class="ex.soft.service.manager.PhoneService"/>-->
+    <!--<bean id="orderService" class="ex.soft.service.manager.OrderService"/>-->
 
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven/>
