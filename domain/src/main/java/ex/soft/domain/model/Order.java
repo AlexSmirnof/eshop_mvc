@@ -91,7 +91,7 @@ public class Order {
 
         Order that = (Order) o;
 
-        return key != null ? key.equals(that.key) : false;
+        return key != null ? key.equals(that.getKey()) : false;
     }
 
     @Override

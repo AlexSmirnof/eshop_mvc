@@ -1,8 +1,8 @@
 SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
 
 START TRANSACTION
-INSERT INTO Phones (model,color,displaySize,price) VALUES ('Samsung Galaxy S6 16GB','black','4"','250.00');
-INSERT INTO Phones (model,color,displaySize,price) VALUES ('Samsung Galaxy S6 32GB','black','4"','350.00');
+INSERT INTO Phones (model,color,displaySize,ph_length,width,camera,price) VALUES ('Samsung Galaxy S6 16GB','black','4"','14mm','56mm','12MP','250.00');
+INSERT INTO Phones (model,color,displaySize,ph_length,width,camera,price) VALUES ('Samsung Galaxy S6 32GB','black','4"','14mm','56mm','12MP','300.00');
 INSERT INTO Phones (model,color,displaySize,price) VALUES ('Iphone 5','black','8"','500.00');
 INSERT INTO Phones (model,color,displaySize,price) VALUES ('IPhone 6','black','8"','650.00');
 COMMIT;

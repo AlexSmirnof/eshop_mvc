@@ -5,43 +5,32 @@ import ex.soft.domain.model.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
  * Created by Alex108 on 14.10.2016.
  */
 @Service
-public class OrderService implements IService<Order> {
+public class OrderService {
 
     private OrderDao orderDao;
 
     public OrderService() {}
 
+    @Resource(name = "orderDao")
     public void setOrderDao(OrderDao orderDao) {
         this.orderDao = orderDao;
     }
 
     @Transactional
-    @Override
-    public Order get(Long key) {
-        return null;
+    public Order getOrder(Long key) {
+        return orderDao.get(key);
     }
 
     @Transactional
-    @Override
-    public void save(Order order) {
-
+    public void placeOrder(Order order){
+       orderDao.save(order);
     }
 
-    @Transactional
-    @Override
-    public List<Order> findAll() {
-        return null;
-    }
-
-    @Transactional
-    @Override
-    public void close() {
-
-    }
 }

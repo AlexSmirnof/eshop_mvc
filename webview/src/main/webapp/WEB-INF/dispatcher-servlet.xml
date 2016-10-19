@@ -7,14 +7,11 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package="ex.soft.webview"/>
+    <context:component-scan base-package="ex.soft.webview.controller"/>
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/pages/"/>
-        <property name="suffix" value=".jsp"/>
+        <property name="prefix" value="/WEB-INF/views/*/*"/>
+        <property name="suffix" value="*.jsp"/>
     </bean>
-
-    <!--<bean id="phoneService" class="ex.soft.service.manager.PhoneService"/>-->
-    <!--<bean id="orderService" class="ex.soft.service.manager.OrderService"/>-->
 
     <mvc:default-servlet-handler/>
     <mvc:annotation-driven/>

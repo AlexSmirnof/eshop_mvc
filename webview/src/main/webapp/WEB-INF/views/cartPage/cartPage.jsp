@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Product Details</title>
+    <title>Cart</title>
 </head>
 <body>
 

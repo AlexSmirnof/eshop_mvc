@@ -11,15 +11,21 @@ public class Phone {
     private String model;
     private String color;
     private String displaySize;
+    private String length;
+    private String width;
+    private String camera;
     private BigDecimal price;
 
     public Phone() {}
 
-    public Phone(Long key, String model, String color, String displaySize, BigDecimal price) {
+    public Phone(Long key, String model, String color, String displaySize, String length, String width, String camera, BigDecimal price) {
         this.key = key;
         this.model = model;
         this.color = color;
         this.displaySize = displaySize;
+        this.length = length;
+        this.width = width;
+        this.camera = camera;
         this.price = price;
     }
 
@@ -63,6 +69,30 @@ public class Phone {
         this.price = price;
     }
 
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    public String getCamera() {
+        return camera;
+    }
+
+    public void setCamera(String camera) {
+        this.camera = camera;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,7 +100,7 @@ public class Phone {
 
         Phone that = (Phone) o;
 
-        return key != null ? key.equals(that.key) : false;
+        return key != null ? key.equals(that.getKey()) : false;
     }
 
     @Override
@@ -85,6 +115,9 @@ public class Phone {
                 ", model='" + model + '\'' +
                 ", color='" + color + '\'' +
                 ", displaySize='" + displaySize + '\'' +
+                ", length='" + length + '\'' +
+                ", width='" + width + '\'' +
+                ", camera='" + camera + '\'' +
                 ", price=" + price +
                 '}';
     }

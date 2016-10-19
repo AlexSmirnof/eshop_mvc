@@ -1,23 +1,18 @@
 package ex.soft.domain.dao.jdbc;
 
+import ex.soft.domain.dao.OrderDao;
+import ex.soft.domain.dao.PhoneDao;
 import ex.soft.domain.model.Order;
 import ex.soft.domain.model.OrderItem;
 import ex.soft.domain.model.Phone;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Suite;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,66 +20,19 @@ import static org.junit.Assert.assertEquals;
  * Created by Alex108 on 14.10.2016.
  */
 
-@RunWith(Parameterized.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:applicationContext-domain-test.xml", "classpath:db-config-order-test.xml"})
 public class JdbcOrderDaoTest {
 
-    private EmbeddedDatabase db;
-    private JdbcOrderDao orderDao;
+    @Autowired
+    private OrderDao orderDao;
+    public Phone phoneKey1 = new Phone(1l, "Samsung Galaxy S6 16GB", "black", "4\"","14mm","56mm","12MP", new BigDecimal("250.00"));
+    public Phone phoneKey2 = new Phone(2l, "Samsung Galaxy S6 32GB", "black", "4\"","14mm","56mm","12MP", new BigDecimal("300.00"));
+    public Order input = new Order(null, "Alex", "XXX", "YYY", "12345", new BigDecimal("250.00"), Arrays.asList(new OrderItem(phoneKey1, 1l)));
+    public Order input2 = new Order(null, "Ann", "XXX", "YYY", "12345", new BigDecimal("600.00"), Arrays.asList(new OrderItem(phoneKey2, 2l)));
+    public Order expected = new Order(null, "Alex", "XXX", "YYY", "12345", new BigDecimal("250.00"), Arrays.asList(new OrderItem(phoneKey1, 1l)));
+    public Order expected2 = new Order(null, "Ann", "XXX", "YYY", "12345", new BigDecimal("600.00"), Arrays.asList(new OrderItem(phoneKey2, 2l)));
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> data(){
-        Phone phoneKey1 = new Phone(1l, "Samsung Galaxy S6 16GB", "black", "4\"", new BigDecimal("250.00"));
-        Phone phoneKey2 = new Phone(2l, "Samsung Galaxy S6 32GB", "black", "4\"", new BigDecimal("300.00"));
-        OrderItem orderItem1 = new OrderItem(phoneKey1, 1l);
-        OrderItem orderItem2 = new OrderItem(phoneKey2, 2l);
-        return Arrays.asList(new Object[][]{
-                {
-                        new Phone(null, "Samsung Galaxy S6 16GB", "black", "4\"", new BigDecimal("250.00")),
-                        new Phone(null, "Samsung Galaxy S6 32GB", "black", "4\"", new BigDecimal("300.00")),
-                        new Order(null, "Alex", "XXX", "YYY", "12345", new BigDecimal("250.00"), Arrays.asList(orderItem1)),
-                        new Order(null, "Ann", "XXX", "YYY", "12345", new BigDecimal("600.00"), Arrays.asList(orderItem2)),
-                        new Order(null, "Alex", "XXX", "YYY", "12345", new BigDecimal("250.00"), Arrays.asList(orderItem1)),
-                        new Order(null, "Ann", "XXX", "YYY", "12345", new BigDecimal("600.00"), Arrays.asList(orderItem2)),
-                }
-        });
-    }
-
-    @Parameterized.Parameter
-    public Phone phone1;
-    @Parameterized.Parameter(value = 1)
-    public Phone phone2;
-    @Parameterized.Parameter(value = 2)
-    public Order input;
-    @Parameterized.Parameter(value = 3)
-    public Order input2;
-    @Parameterized.Parameter(value = 4)
-    public Order expected;
-    @Parameterized.Parameter(value = 5)
-    public Order expected2;
-
-    @Before
-    public void setUp() throws Exception {
-        db = new EmbeddedDatabaseBuilder()
-                .setName("OrderDao Test")
-                .setType(EmbeddedDatabaseType.HSQL)
-                .addScript("/db/schema.sql")
-//                .addScript("/db/test-data.sql")
-                .build();
-//
-        JdbcPhoneDao phoneDao = new JdbcPhoneDao();
-        phoneDao.setDataSource(db);
-        phoneDao.save(phone1);
-        phoneDao.save(phone2);
-//
-        orderDao = new JdbcOrderDao();
-        orderDao.setDataSource(db);
-        orderDao.setPhoneDao(phoneDao);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        db.shutdown();
-    }
 
     @Test
     public void get() throws Exception {
