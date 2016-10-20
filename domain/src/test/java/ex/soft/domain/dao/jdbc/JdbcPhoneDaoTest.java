@@ -16,7 +16,6 @@ import static org.junit.Assert.assertEquals;
  * Created by Alex108 on 13.10.2016.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-//@Sql("classpath:db/schema.sql")
 @ContextConfiguration(locations = {"classpath:applicationContext-domain-test.xml", "classpath:db-config-phone-test.xml"})
 public class JdbcPhoneDaoTest{
 

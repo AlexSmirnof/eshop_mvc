@@ -15,7 +15,7 @@
     <h2>${product.model}</h2>
     <table border="1">
             <tr>
-                <td>Dsplay}</td>
+                <td>Display</td>
                 <td>${product.displaySize}</td>
             </tr>
             <tr>

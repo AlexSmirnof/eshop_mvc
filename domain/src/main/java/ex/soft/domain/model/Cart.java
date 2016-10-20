@@ -1,5 +1,7 @@
 package ex.soft.domain.model;
 
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -7,15 +9,24 @@ import java.util.Map;
  */
 public class Cart {
 
-    private Map<Phone, Long> products;
+    private int totalQuantity;
+    private BigDecimal totalPrice;
+    private Map<Phone, Integer> productsAndQuantities;
 
-    public Cart() {}
-
-    public Map<Phone, Long> getProducts() {
-        return products;
+    public Cart() {
+        productsAndQuantities = new LinkedHashMap<>();
     }
 
-    public void setProducts(Map<Phone, Long> products) {
-        this.products = products;
+    public int getTotalQuantity() {
+        return productsAndQuantities.values().stream().reduce(Integer::sum).orElse(0);
     }
+
+    public BigDecimal getTotalPrice() {
+        return productsAndQuantities.keySet().stream().map(Phone::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public Map<Phone, Integer> getProductsAndQuantities() {
+        return productsAndQuantities;
+    }
+
 }

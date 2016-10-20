@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class AbstractJdbcDaoTest implements TestRule{
     @Override
     public Statement apply(Statement statement, Description description) {
-
         return null;
     }
 }

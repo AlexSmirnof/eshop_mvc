@@ -10,6 +10,8 @@ public class Client {
     private Long key;
     private String firstName;
     private String lastName;
+    private String login;
+    private String password;
     private Cart cart;
     private List<Order> order;
 
@@ -37,6 +39,22 @@ public class Client {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Cart getCart() {
@@ -76,6 +94,8 @@ public class Client {
                 "key=" + key +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", cart=" + cart +
                 ", order=" + order +
                 '}';

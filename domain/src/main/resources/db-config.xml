@@ -7,7 +7,7 @@
 
     <jdbc:embedded-database id="dataSource" type="HSQL">
         <jdbc:script location="classpath:/db/schema.sql"/>
-        <!--<jdbc:script location="classpath:/db/test-data.sql"/>-->
+        <jdbc:script location="classpath:/db/test-data.sql"/>
     </jdbc:embedded-database>
 
 </beans>

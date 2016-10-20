@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -25,7 +25,7 @@ public class ProductDetailsController {
     @Qualifier("productService")
     private ProductService productService;
 
-    @RequestMapping("/{model}/{key}")
+    @RequestMapping(value = "/{model}/{key}", method = RequestMethod.GET)
     public String showProductDetails(@PathVariable("model") String model,
                                      @PathVariable("key")   Long key,
                                                             ModelMap modelMap ){
@@ -34,4 +34,10 @@ public class ProductDetailsController {
         return "productDetails";
     }
 
+    @RequestMapping(value = "/add/{key}", method = RequestMethod.POST)
+    public String addProductToCart(@ModelAttribute @Valid Integer quantity, BindingResult result,
+                                   @PathVariable("key") Long productId                           ){
+
+        return "";
+    }
 }
