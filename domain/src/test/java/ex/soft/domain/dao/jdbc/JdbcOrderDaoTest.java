@@ -1,7 +1,6 @@
 package ex.soft.domain.dao.jdbc;
 
 import ex.soft.domain.dao.OrderDao;
-import ex.soft.domain.dao.PhoneDao;
 import ex.soft.domain.model.Order;
 import ex.soft.domain.model.OrderItem;
 import ex.soft.domain.model.Phone;

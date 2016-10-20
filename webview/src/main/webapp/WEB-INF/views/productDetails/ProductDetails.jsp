@@ -6,7 +6,7 @@
 <body>
 <header>
     <h1><span class="glyphicon glyphicon-phone"></span>Phonify</h1>
-    <button>My cart: ${0} items ${0}$</button>
+    <button>My cart: ${cart.totalQuantity} items ${cart.totalPrice}$</button>
 </header>
 <nav>
     <a href="#"><button>Back to product list</button></a>

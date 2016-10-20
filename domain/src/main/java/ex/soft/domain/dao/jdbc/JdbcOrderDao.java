@@ -1,11 +1,10 @@
 package ex.soft.domain.dao.jdbc;
 
 import ex.soft.domain.dao.OrderDao;
-import ex.soft.domain.dao.PhoneDao;
+import ex.soft.domain.dao.ProductDao;
 import ex.soft.domain.model.Order;
 import ex.soft.domain.model.OrderItem;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import ex.soft.domain.model.Phone;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -37,7 +36,7 @@ public class JdbcOrderDao implements OrderDao {
     public static final String UPDATE_ORDER_ITEM =           "UPDATE OrderItems SET phone_id = :phone_id, quantity = :quantity WHERE order_id = :order_id";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private PhoneDao phoneDao;
+    private ProductDao<Phone> productDao;
 
     public JdbcOrderDao() {}
 
@@ -48,8 +47,8 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Resource(name = "phoneDao")
-    public void setPhoneDao(PhoneDao phoneDao) {
-        this.phoneDao = phoneDao;
+    public void setProductDao(ProductDao productDao) {
+        this.productDao = productDao;
     }
 
     @Override
@@ -65,7 +64,7 @@ public class JdbcOrderDao implements OrderDao {
         if (order == null ) return null;
         List<OrderItem> orderItems = jdbcTemplate.query(GET_ORDER_ITEM_BY_KEY, paramSource, (rs, row) -> {
             OrderItem orderItem = new OrderItem();
-            return setOrderItemProperties(orderItem, rs, phoneDao);
+            return setOrderItemProperties(orderItem, rs, productDao);
         });
         order.setOrderItems(orderItems);
         return order;
@@ -102,7 +101,7 @@ public class JdbcOrderDao implements OrderDao {
             SqlParameterSource paramSource = new MapSqlParameterSource("order_id", order.getKey());
             List<OrderItem> orderItems = jdbcTemplate.query(FIND_ALL_ORDER_ITEMS_BY_KEY, paramSource, (rs, row) -> {
                 OrderItem orderItem = new OrderItem();
-                return setOrderItemProperties(orderItem, rs, phoneDao);
+                return setOrderItemProperties(orderItem, rs, productDao);
             });
             order.setOrderItems(orderItems);
         }
@@ -123,9 +122,9 @@ public class JdbcOrderDao implements OrderDao {
         order.setTotalPrice(rs.getBigDecimal("totalPrice"));
         return order;
     }
-    private static OrderItem setOrderItemProperties(OrderItem orderItem, ResultSet rs, PhoneDao phoneDao) throws SQLException {
+    private static OrderItem setOrderItemProperties(OrderItem orderItem, ResultSet rs, ProductDao productDao) throws SQLException {
         Long phone_id = rs.getLong("phone_id");
-        orderItem.setPhone(phoneDao.get(phone_id));
+        orderItem.setPhone((Phone) productDao.get(phone_id));
         orderItem.setQuantity(rs.getLong("quantity"));
         return orderItem;
     }

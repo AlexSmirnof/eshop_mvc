@@ -5,13 +5,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-    <bean id="phoneDao" class="ex.soft.domain.dao.jdbc.JdbcPhoneDao">
+    <bean id="productDao" class="ex.soft.domain.dao.jdbc.JdbcPhoneDao">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
     <bean id="orderDao" class="ex.soft.domain.dao.jdbc.JdbcOrderDao">
         <property name="dataSource" ref="dataSource"/>
-        <property name="phoneDao" ref="phoneDao"/>
+        <property name="productDao" ref="productDao"/>
     </bean>
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">

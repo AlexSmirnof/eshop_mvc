@@ -1,8 +1,11 @@
 package ex.soft.service;
 
 import ex.soft.domain.dao.IDao;
+import ex.soft.domain.dao.ProductDao;
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Client;
+import ex.soft.domain.model.Phone;
+import ex.soft.domain.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,8 @@ public class CartService {
 
     @Autowired
     private IDao<Client> clientDao;
+    @Autowired
+    private ProductDao<Phone> productDao;
 
     @Transactional
     public Cart getCart(Long clientId){
@@ -23,7 +28,8 @@ public class CartService {
 
     @Transactional
     public void addToCart(Long clientId, Long productId, Integer quantity){
-        clientDao.get(clientId).getCart().getProductsAndQuantities().merge(productId, quantity, Integer::sum);
+        Product product = productDao.get(productId);
+        clientDao.get(clientId).getCart().getProductsAndQuantities().merge(product, quantity, Integer::sum);
     }
 
 }

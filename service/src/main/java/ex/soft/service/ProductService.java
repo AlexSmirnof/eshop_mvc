@@ -1,6 +1,6 @@
 package ex.soft.service;
 
-import ex.soft.domain.dao.PhoneDao;
+import ex.soft.domain.dao.ProductDao;
 import ex.soft.domain.model.Phone;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,21 +14,21 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    private PhoneDao phoneDao;
+    private ProductDao<Phone> productDao;
 
     @Resource(name = "phoneDao")
-    public void setPhoneDao(PhoneDao phoneDao) {
-        this.phoneDao = phoneDao;
+    public void setProductDao(ProductDao productDao) {
+        this.productDao = productDao;
     }
 
     @Transactional
     public Phone getProduct(Long key) {
-        return phoneDao.get(key);
+        return productDao.get(key);
     }
 
     @Transactional
     public List<Phone> listProducts(){
-        return phoneDao.findAll();
+        return productDao.findAll();
     }
 
 }

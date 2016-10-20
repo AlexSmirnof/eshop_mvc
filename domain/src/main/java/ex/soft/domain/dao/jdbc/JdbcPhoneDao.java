@@ -1,6 +1,6 @@
 package ex.soft.domain.dao.jdbc;
 
-import ex.soft.domain.dao.PhoneDao;
+import ex.soft.domain.dao.ProductDao;
 import ex.soft.domain.model.Phone;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Alex108 on 11.10.2016.
  */
 @Repository("phoneDao")
-public class JdbcPhoneDao implements PhoneDao {
+public class JdbcPhoneDao implements ProductDao<Phone> {
 
     public static final String INSERT = "INSERT INTO Phones (model, color, displaySize, ph_length, width, camera, price) VALUES (?,?,?,?,?,?,?)";
     public static final String UPDATE = "UPDATE Phones SET model=?, color=?, displaySize=?, ph_length=?, width=?, camera=?, price=? WHERE id=?";

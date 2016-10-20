@@ -7,11 +7,11 @@ import java.util.Map;
 /**
  * Created by Alex108 on 19.10.2016.
  */
-public class Cart {
+public class Cart<P extends Product> {
 
     private int totalQuantity;
     private BigDecimal totalPrice;
-    private Map<Phone, Integer> productsAndQuantities;
+    private Map<P, Integer> productsAndQuantities;
 
     public Cart() {
         productsAndQuantities = new LinkedHashMap<>();
@@ -22,10 +22,10 @@ public class Cart {
     }
 
     public BigDecimal getTotalPrice() {
-        return productsAndQuantities.keySet().stream().map(Phone::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return productsAndQuantities.keySet().stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public Map<Phone, Integer> getProductsAndQuantities() {
+    public Map<P, Integer> getProductsAndQuantities() {
         return productsAndQuantities;
     }
 

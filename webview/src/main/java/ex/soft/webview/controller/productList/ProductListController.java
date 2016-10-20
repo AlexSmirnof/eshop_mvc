@@ -33,13 +33,16 @@ public class ProductListController {
     @Qualifier("cartService")
     private CartService cartService;
 
+    @ModelAttribute("cart")
+    public Cart showCartButton(HttpSession session) {
+        return cartService.getCart(Long.valueOf(session.getId()));
+    }
+
     @RequestMapping(method = RequestMethod.GET)
-    @ModelAttribute()
     public ModelAndView showProductList(){
         ModelAndView modelAndView = new ModelAndView("productList");
         List<Phone> productList = productService.listProducts();
         modelAndView.addObject("productList", productList);
-        modelAndView.addObject("cart", new Cart());
         return modelAndView;
     }
 
@@ -52,9 +55,8 @@ public class ProductListController {
             model.addAttribute("errors", "Invalid quantity number");
             return "productList";
         } else {
- /*?*/      Long clientId = (Long) ((Client) session.getAttribute("client")).getKey();
+            Long clientId = Long.valueOf(session.getId());
             cartService.addToCart(clientId, productId, quantity);
-            model.addAttribute("cart", cartService.getCart(clientId));
             return "productList";
         }
     }

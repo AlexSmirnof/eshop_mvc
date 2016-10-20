@@ -11,7 +11,7 @@
 
     <bean id="orderDao" class="ex.soft.domain.dao.jdbc.JdbcOrderDao">
         <property name="dataSource" ref="dataSource"/>
-        <property name="phoneDao" ref="phoneDao"/>
+        <property name="productDao" ref="phoneDao"/>
     </bean>
 
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
