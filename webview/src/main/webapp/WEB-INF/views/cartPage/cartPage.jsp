@@ -26,7 +26,7 @@
                 <td>${product.color}</td>
                 <td>${product.displaySize}</td>
                 <td>${product.price}</td>
-                <td><input type="text" name="quantity"/></td>
+                <td><input type="text" name="quantity" value="${productList[product].quantity}"/></td>
                 <td><input type="submit" value="Add To Cart"/></td>
             </tr>
         </c:forEach>

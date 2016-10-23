@@ -57,11 +57,11 @@ public class Client {
         this.password = password;
     }
 
-    public Cart getCart() {
+    public <P extends Product> Cart<P> getCart() {
         return cart;
     }
 
-    public void setCart(Cart cart) {
+    public <P extends Product> void setCart(Cart<P> cart) {
         this.cart = cart;
     }
 

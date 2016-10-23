@@ -2,7 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<c:url var="pageUrl"/>--%>
+<%--<c:url var="pageUrl" value=""/>--%>
 <%--${pageContext.request.requestURL}--%>
 <html>
 <head>
@@ -13,7 +13,7 @@
 <body>
 <header>
 <h1><span class="glyphicon glyphicon-phone"></span> Phonify</h1> <%--Adorn Roman font | Gallivant--%>
-    <button>My cart: ${cart.totalQuantity} items ${cart.totalPrice}$</button>
+    <button>My cart: <span id="cartItems">${cart.totalQuantity}</span> items <span id="cartPrice">${cart.totalPrice}</span>$</button>
 </header>
 <hr>
 <nav>
@@ -37,13 +37,48 @@
             <td>${product.color}</td>
             <td>${product.displaySize}</td>
             <td>${product.price}</td>
-            <td><input type="text" name="quantity" value="${cartItems['${product}}']}"/></td>
-            <td><input type="submit" value="Delete"/></td>
+            <td><input type="text" id="productQuantity" key="${product.id}" value="0"/></td>
+            <td><input type="submit" id="addToCartBtn" value="Delete"/></td>
         </tr>
     </c:forEach>
 </table>
     <button>Update</button>
     <button>Order</button>
+
+    <script>
+        var productInfo = {};
+        productInfo.id = document.getElementById("productQuantity").getAttribute("name");
+        productInfo.quantity = document.getElementById("productQuantity").getAttribute("value");
+        productInfo = JSON.stringify(productInfo);
+        var urlWS = "ws://localhost:8080/eshop_mvc/addToCartWS";
+        var urlPost = "http://localhost:8080/eshop_mvc//addProductToCart/";
+        urlPost += document.querySelector('#productQuantity').getAttribute('key');
+
+        if (window.WebSocket) {
+            var ws = new WebSocket(url);
+            ws.onmessage = function (e) {
+//                поменять значения на cart btn
+            };
+            ws.onerror = function (e) {
+                alert(e.data);
+            };
+            window.onload = function () {
+                document.getElementById("#productQuantity").onclick = function () {
+                    ws.send(productInfo);
+                }
+            }
+        } else {
+            $("#addToCartBtn").click(function(){
+                $.post( urlPost,
+                        productInfo
+                        ,
+                        function(data, status){
+                            alert("Data: " + data + "\nStatus: " + status);
+ //                     поменять значения на cart btn
+                        });
+            });
+        }
+    </script>
 </div>
 </body>
 </html>

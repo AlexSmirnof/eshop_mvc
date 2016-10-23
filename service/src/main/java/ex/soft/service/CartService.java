@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by Alex108 on 19.10.2016.
  */
-@Service//("cartService")
+@Service("cartService")
 public class CartService {
 
     @Autowired

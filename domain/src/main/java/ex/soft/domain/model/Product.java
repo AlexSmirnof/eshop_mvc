@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by Alex108 on 21.10.2016.
  */
-public abstract class Product {
+public abstract class Product<P extends Product> {
 
     private Long key;
     private BigDecimal price;
@@ -33,7 +33,7 @@ public abstract class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Phone that = (Phone) o;
+        P that = (P) o;
 
         return key != null ? key.equals(that.getKey()) : false;
     }

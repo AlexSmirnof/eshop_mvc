@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by Alex108 on 11.10.2016.
  */
-public class Phone extends Product{
+public class Phone extends Product<Phone>{
 
     private String model;
     private String color;

@@ -48,8 +48,8 @@ public class ProductDetailsController {
         return "productDetails/" + model + "/" + productId;
     }
 
-    @RequestMapping(value = "/{model/{key}/add", method = RequestMethod.POST)
-    public String addProductToCart(@ModelAttribute @Valid @Size(min=1) Integer quantity, BindingResult result,
+    @RequestMapping(value = "/{model/{key}/addProductToCart", method = RequestMethod.POST)
+    public String addProductToCart(@ModelAttribute @Valid @Size(min = 1) Integer quantity, BindingResult result,
                                    @PathVariable("key") Long productId,
                                    HttpSession session,
                                    Model model){
@@ -57,7 +57,7 @@ public class ProductDetailsController {
             model.addAttribute("errors", "Invalid quantity number");
             return "productDetails/" + model + "/" + productId;
         } else {
-            Long clientId = Long.valueOf(session.getId());
+            Long clientId = session.getCreationTime();
             cartService.addToCart(clientId, productId, quantity);
             return "productDetails/" + model + "/" + productId;
         }
