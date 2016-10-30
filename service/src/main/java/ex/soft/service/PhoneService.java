@@ -1,6 +1,6 @@
 package ex.soft.service;
 
-import ex.soft.domain.dao.ProductDao;
+import ex.soft.domain.dao.PhoneDao;
 import ex.soft.domain.model.Phone;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,23 +12,23 @@ import java.util.List;
  * Created by Alex108 on 19.10.2016.
  */
 @Service
-public class ProductService {
+public class PhoneService {
 
-    private ProductDao<Phone> productDao;
-
-    @Resource(name = "phoneDao")
-    public void setProductDao(ProductDao productDao) {
-        this.productDao = productDao;
-    }
+    private PhoneDao phoneDao;
 
     @Transactional
     public Phone getProduct(Long key) {
-        return productDao.get(key);
+        return phoneDao.get(key);
     }
 
     @Transactional
     public List<Phone> listProducts(){
-        return productDao.findAll();
+        return phoneDao.findAll();
+    }
+
+    @Resource(name = "phoneDao")
+    public void setPhoneDao(PhoneDao phoneDao) {
+        this.phoneDao = phoneDao;
     }
 
 }

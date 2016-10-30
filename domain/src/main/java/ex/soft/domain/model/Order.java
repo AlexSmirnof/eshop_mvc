@@ -15,10 +15,11 @@ public class Order {
     private String contactPhoneNo;
     private BigDecimal totalPrice;
     private List<OrderItem> orderItems;
+    private Long userId;
 
     public Order() {}
 
-    public Order(Long key, String firstName, String lastName, String deliveryAddress, String contactPhoneNo, BigDecimal totalPrice, List<OrderItem> orderItems) {
+    public Order(Long key, String firstName, String lastName, String deliveryAddress, String contactPhoneNo, BigDecimal totalPrice, List<OrderItem> orderItems, Long userId) {
         this.key = key;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,6 +27,7 @@ public class Order {
         this.contactPhoneNo = contactPhoneNo;
         this.totalPrice = totalPrice;
         this.orderItems = orderItems;
+        this.userId = userId;
     }
 
     public Long getKey() {
@@ -34,22 +36,6 @@ public class Order {
 
     public void setKey(Long key) {
         this.key = key;
-    }
-
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public String getFirstName() {
@@ -84,6 +70,30 @@ public class Order {
         this.contactPhoneNo = contactPhoneNo;
     }
 
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,16 +109,4 @@ public class Order {
         return key != null ? key.hashCode() : 0;
     }
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "key=" + key +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", deliveryAddress='" + deliveryAddress + '\'' +
-                ", contactPhoneNo='" + contactPhoneNo + '\'' +
-                ", totalPrice=" + totalPrice +
-                ", orderItems=" + orderItems +
-                '}';
-    }
 }

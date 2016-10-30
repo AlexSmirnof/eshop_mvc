@@ -1,21 +1,29 @@
 package ex.soft.domain.model;
 
-import java.util.List;
-
 /**
  * Created by Alex108 on 19.10.2016.
  */
-public class Client {
+public class User {
 
     private Long key;
     private String firstName;
     private String lastName;
+    private String deliveryAddress;
+    private String contactPhoneNo;
     private String login;
     private String password;
-    private Cart cart;
-    private List<Order> order;
 
-    public Client() {}
+    public User() {}
+
+    public User(Long key, String firstName, String lastName, String deliveryAddress, String contactPhoneNo, String login, String password) {
+        this.key = key;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.deliveryAddress = deliveryAddress;
+        this.contactPhoneNo = contactPhoneNo;
+        this.login = login;
+        this.password = password;
+    }
 
     public Long getKey() {
         return key;
@@ -57,20 +65,20 @@ public class Client {
         this.password = password;
     }
 
-    public <P extends Product> Cart<P> getCart() {
-        return cart;
+    public String getDeliveryAddress() {
+        return deliveryAddress;
     }
 
-    public <P extends Product> void setCart(Cart<P> cart) {
-        this.cart = cart;
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
-    public List<Order> getOrder() {
-        return order;
+    public String getContactPhoneNo() {
+        return contactPhoneNo;
     }
 
-    public void setOrder(List<Order> order) {
-        this.order = order;
+    public void setContactPhoneNo(String contactPhoneNo) {
+        this.contactPhoneNo = contactPhoneNo;
     }
 
     @Override
@@ -90,14 +98,14 @@ public class Client {
 
     @Override
     public String toString() {
-        return "Client{" +
+        return "User{" +
                 "key=" + key +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", contactPhoneNo='" + contactPhoneNo + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
-                ", cart=" + cart +
-                ", order=" + order +
                 '}';
     }
 }

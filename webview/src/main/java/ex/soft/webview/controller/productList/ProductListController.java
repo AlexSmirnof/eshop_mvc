@@ -2,14 +2,12 @@ package ex.soft.webview.controller.productList;
 
 
 import ex.soft.domain.model.Cart;
-import ex.soft.domain.model.Client;
+import ex.soft.domain.model.OrderItem;
 import ex.soft.domain.model.Phone;
-import ex.soft.service.CartService;
-import ex.soft.service.ProductService;
+import ex.soft.service.PhoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -24,40 +23,73 @@ import java.util.List;
  */
 @RequestMapping("/productList")
 @Controller
+@SessionAttributes("cart")
 public class ProductListController {
 
     @Autowired
-    @Qualifier("productService")
-    private ProductService productService;
-    @Autowired
-    @Qualifier("cartService")
-    private CartService cartService;
+    @Qualifier("phoneService")
+    private PhoneService phoneService;
 
     @ModelAttribute("cart")
-    public Cart showCartButton(HttpSession session) {
-        return cartService.getCart(Long.valueOf(session.getId()));
+    public Cart showCartWidget(HttpSession session) {
+        System.out.println("ModelAttribute");
+        Cart cart = (Cart) session.getAttribute("cart");
+        return cart != null ? cart : new Cart();
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView showProductList(){
-        ModelAndView modelAndView = new ModelAndView("productList");
-        List<Phone> productList = productService.listProducts();
+    public ModelAndView showProductList(HttpSession session){
+        ModelAndView modelAndView = new ModelAndView("productList/productList");
+        List<Phone> productList = phoneService.listProducts();
         modelAndView.addObject("productList", productList);
+        System.out.println("PRODUCTS: " + productList);
         return modelAndView;
     }
 
     @RequestMapping(value = "/addProductToCart/{key}", method = RequestMethod.POST)
-    public String addProductToCart(@ModelAttribute("quantity") @Valid @Size(min = 1) Integer quantity, BindingResult result,
-                                   @PathVariable("key") Long productId,
-                                   HttpSession session,
-                                   Model model){
+    public @ResponseBody String addProductToCart(@Valid @Size(min = 1) @ModelAttribute("quantity") Long quantity, BindingResult result,
+                                                 @PathVariable("key") Long productId,
+                                                 HttpSession session){
+        System.out.println("AJAX: key="+ productId + " quan=" + quantity);
         if (result.hasErrors()){
-            model.addAttribute("errors", "Invalid quantity number");
-            return "productList";
+            System.out.println("ERROR " + result.toString());
+            return "Error: Invalid quantity number";
+        } else if (quantity <= 0){
+            return "Error: Quantity must be greater than 0";
         } else {
-            Long clientId = session.getCreationTime();
-            cartService.addToCart(clientId, productId, quantity);
-            return "productList";
+            Phone phone = phoneService.getProduct(productId);
+            Cart cart = (Cart) session.getAttribute("cart");
+
+            int index = findIndexOfProductInCart(cart, phone);
+            if( index < 0 ){
+                cart.getOrderItems().add(new OrderItem(phone, quantity));
+            } else {
+                Long oldQuantity = cart.getOrderItems().get(index).getQuantity();
+                cart.getOrderItems().get(index).setQuantity(Long.sum(oldQuantity, quantity));
+            }
+
+            Long totalQuantity = Long.sum(cart.getTotalQuantity(), quantity);
+            cart.setTotalQuantity(totalQuantity);
+
+            BigDecimal totalPrice = phone.getPrice().multiply(BigDecimal.valueOf(quantity.longValue()));
+            totalPrice = cart.getTotalPrice().add(totalPrice);
+            cart.setTotalPrice(totalPrice);
+
+            session.setAttribute("cart", cart);
+
+            return phone.getModel() + " in " + quantity + " items, added to cart";
         }
+    }
+
+    public static int findIndexOfProductInCart(Cart cart, Phone phone){
+        List<OrderItem> orderItems = cart.getOrderItems();
+        int index = 0;
+        for (OrderItem orderItem : orderItems) {
+            if (orderItem.getPhone().equals(phone)) {
+                return index;
+            }
+            index++;
+        }
+        return -1;
     }
 }

@@ -1,10 +1,9 @@
 package ex.soft.domain.dao.jdbc;
 
 import ex.soft.domain.dao.OrderDao;
-import ex.soft.domain.dao.ProductDao;
+import ex.soft.domain.dao.PhoneDao;
 import ex.soft.domain.model.Order;
 import ex.soft.domain.model.OrderItem;
-import ex.soft.domain.model.Phone;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -24,19 +23,19 @@ import java.util.List;
 @Repository("orderDao")
 public class JdbcOrderDao implements OrderDao {
 
-    public static final String FIND_ALL = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, totalPrice FROM Orders";
-    public static final String GET =      "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, totalPrice FROM Orders WHERE id = :key";
-    public static final String INSERT =   "INSERT INTO Orders (firstName, lastName, deliveryAddress, contactPhoneNo, totalPrice) " +
-                                                     "VALUES (:firstName, :lastName, :deliveryAddress, :contactPhoneNo, :totalPrice)";
+    public static final String FIND_ALL = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, totalPrice, userId FROM Orders";
+    public static final String GET =      "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, totalPrice, userId FROM Orders WHERE id = :key";
+    public static final String INSERT =   "INSERT INTO Orders (firstName, lastName, deliveryAddress, contactPhoneNo, totalPrice, userId) " +
+                                                     "VALUES (:firstName, :lastName, :deliveryAddress, :contactPhoneNo, :totalPrice, :userId)";
     public static final String UPDATE =   "UPDATE Orders SET firstName = :firstName, lastName = :lastName, deliveryAddress = :deliveryAddress, " +
-                                                            "contactPhoneNo = :contactPhoneNo, totalPrice = :totalPrice WHERE id = :key";
+                                                            "contactPhoneNo = :contactPhoneNo, totalPrice = :totalPrice, userId = :userId WHERE id = :key";
     public static final String FIND_ALL_ORDER_ITEMS_BY_KEY = "SELECT phone_id, quantity FROM OrderItems WHERE order_id = :order_id";
     public static final String GET_ORDER_ITEM_BY_KEY =       "SELECT phone_id, quantity FROM OrderItems WHERE order_id = :key";
     public static final String INSERT_ORDER_ITEM =           "INSERT INTO OrderItems (phone_id, quantity, order_id) VALUES (:phone_id, :quantity, :order_id)";
     public static final String UPDATE_ORDER_ITEM =           "UPDATE OrderItems SET phone_id = :phone_id, quantity = :quantity WHERE order_id = :order_id";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private ProductDao<Phone> productDao;
+    private PhoneDao phoneDao;
 
     public JdbcOrderDao() {}
 
@@ -47,8 +46,8 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Resource(name = "phoneDao")
-    public void setProductDao(ProductDao productDao) {
-        this.productDao = productDao;
+    public void setPhoneDao(PhoneDao phoneDao) {
+        this.phoneDao = phoneDao;
     }
 
     @Override
@@ -64,7 +63,7 @@ public class JdbcOrderDao implements OrderDao {
         if (order == null ) return null;
         List<OrderItem> orderItems = jdbcTemplate.query(GET_ORDER_ITEM_BY_KEY, paramSource, (rs, row) -> {
             OrderItem orderItem = new OrderItem();
-            return setOrderItemProperties(orderItem, rs, productDao);
+            return setOrderItemProperties(orderItem, rs, phoneDao);
         });
         order.setOrderItems(orderItems);
         return order;
@@ -101,7 +100,7 @@ public class JdbcOrderDao implements OrderDao {
             SqlParameterSource paramSource = new MapSqlParameterSource("order_id", order.getKey());
             List<OrderItem> orderItems = jdbcTemplate.query(FIND_ALL_ORDER_ITEMS_BY_KEY, paramSource, (rs, row) -> {
                 OrderItem orderItem = new OrderItem();
-                return setOrderItemProperties(orderItem, rs, productDao);
+                return setOrderItemProperties(orderItem, rs, phoneDao);
             });
             order.setOrderItems(orderItems);
         }
@@ -120,11 +119,12 @@ public class JdbcOrderDao implements OrderDao {
         order.setDeliveryAddress(rs.getString("deliveryAddress"));
         order.setContactPhoneNo(rs.getString("contactPhoneNo"));
         order.setTotalPrice(rs.getBigDecimal("totalPrice"));
+        order.setUserId(rs.getLong("userId"));
         return order;
     }
-    private static OrderItem setOrderItemProperties(OrderItem orderItem, ResultSet rs, ProductDao productDao) throws SQLException {
+    private static OrderItem setOrderItemProperties(OrderItem orderItem, ResultSet rs, PhoneDao phoneDao) throws SQLException {
         Long phone_id = rs.getLong("phone_id");
-        orderItem.setPhone((Phone) productDao.get(phone_id));
+        orderItem.setPhone(phoneDao.get(phone_id));
         orderItem.setQuantity(rs.getLong("quantity"));
         return orderItem;
     }
@@ -134,7 +134,8 @@ public class JdbcOrderDao implements OrderDao {
                                  .addValue("lastName", order.getLastName())
                                  .addValue("deliveryAddress", order.getDeliveryAddress())
                                  .addValue("contactPhoneNo", order.getContactPhoneNo())
-                                 .addValue("totalPrice", order.getTotalPrice());
+                                 .addValue("totalPrice", order.getTotalPrice())
+                                 .addValue("userId", order.getUserId());
         return key == null ? paramSource : paramSource.addValue("key", key);
 
     }

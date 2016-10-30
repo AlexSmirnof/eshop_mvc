@@ -1,84 +1,47 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<c:url var="pageUrl" value=""/>--%>
-<%--${pageContext.request.requestURL}--%>
 <html>
 <head>
     <title>ProductList</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/styles.css"/>
+    <link rel="stylesheet" text="text/css" href="<c:url value="/css/styles.css"/>" >
+    <script type="text/javascript" src="<c:url value="/js/jquery-3.1.1.min.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/main.js"/>"></script>
 </head>
 <body>
-<header>
-<h1><span class="glyphicon glyphicon-phone"></span> Phonify</h1> <%--Adorn Roman font | Gallivant--%>
-    <button>My cart: <span id="cartItems">${cart.totalQuantity}</span> items <span id="cartPrice">${cart.totalPrice}</span>$</button>
-</header>
-<hr>
-<nav>
-    <a href="#"><button>Back to product list</button></a>
-    <a href="#"><button>Order</button></a>
-</nav>
 <div class="container">
-<table border="1">
-    <caption>Cart</caption>
-    <tr>
-        <th>Model</th>
-        <th>Color</th>
-        <th>Display Size</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Action</th>
-    </tr>
-    <c:forEach items="${cartItems.keySet}" var="product">
-        <tr>
-            <td><a href="/productDetails/${product.model}/${product.key}" target="_blank">${product.model}</a></td>
-            <td>${product.color}</td>
-            <td>${product.displaySize}</td>
-            <td>${product.price}</td>
-            <td><input type="text" id="productQuantity" key="${product.id}" value="0"/></td>
-            <td><input type="submit" id="addToCartBtn" value="Delete"/></td>
-        </tr>
-    </c:forEach>
-</table>
-    <button>Update</button>
-    <button>Order</button>
-
-    <script>
-        var productInfo = {};
-        productInfo.id = document.getElementById("productQuantity").getAttribute("name");
-        productInfo.quantity = document.getElementById("productQuantity").getAttribute("value");
-        productInfo = JSON.stringify(productInfo);
-        var urlWS = "ws://localhost:8080/eshop_mvc/addToCartWS";
-        var urlPost = "http://localhost:8080/eshop_mvc//addProductToCart/";
-        urlPost += document.querySelector('#productQuantity').getAttribute('key');
-
-        if (window.WebSocket) {
-            var ws = new WebSocket(url);
-            ws.onmessage = function (e) {
-//                поменять значения на cart btn
-            };
-            ws.onerror = function (e) {
-                alert(e.data);
-            };
-            window.onload = function () {
-                document.getElementById("#productQuantity").onclick = function () {
-                    ws.send(productInfo);
-                }
-            }
-        } else {
-            $("#addToCartBtn").click(function(){
-                $.post( urlPost,
-                        productInfo
-                        ,
-                        function(data, status){
-                            alert("Data: " + data + "\nStatus: " + status);
- //                     поменять значения на cart btn
-                        });
-            });
-        }
-    </script>
+    <div class="row">
+        <header>
+            <div class="phone"><span class="glyphicon glyphicon-phone"></span> Phonify</div> <%--Gallivant--%>
+            <button id="cartBtn"><u>My cart:</u> <span id="cartItems">${empty cart.totalQuantity ? 0 : cart.totalQuantity}</span>
+                    items <span id="cartPrice">${empty cart.totalPrice ? 0 : cart.totalPrice}</span>$
+            </button>
+            <div class="clear"></div>
+        </header>
+    </div>
+    <div class="row">
+        <h2> Phones</h2>
+        <table border="1">
+            <tr>
+                <th>Model</th>
+                <th>Color</th>
+                <th>Display Size</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Action</th>
+            </tr>
+            <c:forEach items="${productList}" var="product">
+                <tr>
+                    <td><a href="productDetails?model=${product.model}&key=${product.key}" target="_blank">${product.model}</a></td>
+                    <td>${product.color}</td>
+                    <td>${product.displaySize}</td>
+                    <td>${product.price}</td>
+                    <td><input type="text"  class="quantityField" key="${product.key}" size="5" value="1"/></td>
+                    <td><button class="addToCartBtn" key="${product.key}">Add to cart</button></td>
+                </tr>
+            </c:forEach>
+        </table>
+    </div>
 </div>
 </body>
 </html>

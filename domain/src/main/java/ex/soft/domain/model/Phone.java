@@ -5,26 +5,36 @@ import java.math.BigDecimal;
 /**
  * Created by Alex108 on 11.10.2016.
  */
-public class Phone extends Product<Phone>{
+public class Phone {
 
+    private Long key;
     private String model;
     private String color;
     private String displaySize;
     private String length;
     private String width;
     private String camera;
+    private BigDecimal price;
 
     public Phone() {}
 
     public Phone(Long key, String model, String color, String displaySize, String length, String width, String camera, BigDecimal price) {
-        super.setKey(key);
+        this.key = key;
         this.model = model;
         this.color = color;
         this.displaySize = displaySize;
         this.length = length;
         this.width = width;
         this.camera = camera;
-        super.setPrice(price);
+        this.price = price;
+    }
+
+    public Long getKey() {
+        return key;
+    }
+
+    public void setKey(Long key) {
+        this.key = key;
     }
 
     public String getColor() {
@@ -75,17 +85,40 @@ public class Phone extends Product<Phone>{
         this.camera = camera;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Phone that = (Phone) o;
+
+        return key != null ? key.equals(that.getKey()) : false;
+    }
+
+    @Override
+    public int hashCode() {
+        return key != null ? key.hashCode() : 0;
+    }
+
     @Override
     public String toString() {
         return "Phone{" +
-                "key=" + super.getKey() +
+                "key=" + key +
                 ", model='" + model + '\'' +
                 ", color='" + color + '\'' +
                 ", displaySize='" + displaySize + '\'' +
                 ", length='" + length + '\'' +
                 ", width='" + width + '\'' +
                 ", camera='" + camera + '\'' +
-                ", price=" + super.getPrice() +
+                ", price=" + price +
                 '}';
     }
 }

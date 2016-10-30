@@ -9,8 +9,8 @@ COMMIT;
 -- INSERT INTO Phones (model,color,displaySize,price) VALUES ('IPhone 6','black','8"','650.00');
 -- COMMIT;
 -- START TRANSACTION
--- INSERT INTO Orders (firstName,lastName,deliveryAddress,contactPhoneNo,totalPrice) VALUES ('Alex','XXX','YYY','7654321','1000.00');
--- INSERT INTO Orders (firstName,lastName,deliveryAddress,contactPhoneNo,totalPrice) VALUES ('Ann','XXX','YYY','1234567','1650.00');
+-- INSERT INTO Orders (firstName,lastName,deliveryAddress,contactPhoneNo,totalPrice,userId) VALUES ('Alex','XXX','YYY','7654321','1000.00','1');
+-- INSERT INTO Orders (firstName,lastName,deliveryAddress,contactPhoneNo,totalPrice,userId) VALUES ('Ann','XXX','YYY','1234567','1650.00','2');
 -- COMMIT;
 -- START TRANSACTION
 -- INSERT INTO OrderItems (phone_id, quantity, order_id) VALUES ('1','2','1');

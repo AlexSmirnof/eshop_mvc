@@ -20,17 +20,17 @@ import static org.junit.Assert.assertEquals;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:applicationContext-domain-test.xml", "classpath:db-config-order-test.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContext-domain.xml", "classpath:db-config-order-test.xml"})
 public class JdbcOrderDaoTest {
 
     @Autowired
     private OrderDao orderDao;
     public Phone phoneKey1 = new Phone(1l, "Samsung Galaxy S6 16GB", "black", "4\"","14mm","56mm","12MP", new BigDecimal("250.00"));
     public Phone phoneKey2 = new Phone(2l, "Samsung Galaxy S6 32GB", "black", "4\"","14mm","56mm","12MP", new BigDecimal("300.00"));
-    public Order input = new Order(null, "Alex", "XXX", "YYY", "12345", new BigDecimal("250.00"), Arrays.asList(new OrderItem(phoneKey1, 1l)));
-    public Order input2 = new Order(null, "Ann", "XXX", "YYY", "12345", new BigDecimal("600.00"), Arrays.asList(new OrderItem(phoneKey2, 2l)));
-    public Order expected = new Order(null, "Alex", "XXX", "YYY", "12345", new BigDecimal("250.00"), Arrays.asList(new OrderItem(phoneKey1, 1l)));
-    public Order expected2 = new Order(null, "Ann", "XXX", "YYY", "12345", new BigDecimal("600.00"), Arrays.asList(new OrderItem(phoneKey2, 2l)));
+    public Order input = new Order(null, "Alex", "XXX", "YYY", "12345", new BigDecimal("250.00"), Arrays.asList(new OrderItem(phoneKey1, 1l)),1L);
+    public Order input2 = new Order(null, "Ann", "XXX", "YYY", "12345", new BigDecimal("600.00"), Arrays.asList(new OrderItem(phoneKey2, 2l)), 2L);
+    public Order expected = new Order(null, "Alex", "XXX", "YYY", "12345", new BigDecimal("250.00"), Arrays.asList(new OrderItem(phoneKey1, 1l)), 1L);
+    public Order expected2 = new Order(null, "Ann", "XXX", "YYY", "12345", new BigDecimal("600.00"), Arrays.asList(new OrderItem(phoneKey2, 2l)), 2L);
 
 
     @Test

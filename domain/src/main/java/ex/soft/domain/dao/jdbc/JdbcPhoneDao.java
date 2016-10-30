@@ -1,6 +1,6 @@
 package ex.soft.domain.dao.jdbc;
 
-import ex.soft.domain.dao.ProductDao;
+import ex.soft.domain.dao.PhoneDao;
 import ex.soft.domain.model.Phone;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Alex108 on 11.10.2016.
  */
 @Repository("phoneDao")
-public class JdbcPhoneDao implements ProductDao<Phone> {
+public class JdbcPhoneDao implements PhoneDao {
 
     public static final String INSERT = "INSERT INTO Phones (model, color, displaySize, ph_length, width, camera, price) VALUES (?,?,?,?,?,?,?)";
     public static final String UPDATE = "UPDATE Phones SET model=?, color=?, displaySize=?, ph_length=?, width=?, camera=?, price=? WHERE id=?";
@@ -27,16 +27,11 @@ public class JdbcPhoneDao implements ProductDao<Phone> {
 
     public JdbcPhoneDao(){}
 
-    @Resource(name = "dataSource")
-    public void setDataSource(DataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
-    }
-
     @Override
     public Phone get(Long key){
         return jdbcTemplate.query(GET, new Object[]{key}, rs -> {
             if (rs.next()) {
-                Phone phone = new Phone();
+                final Phone phone = new Phone();
                 return setPhoneProperties(phone, rs);
             }
             return null;
@@ -45,7 +40,7 @@ public class JdbcPhoneDao implements ProductDao<Phone> {
 
     @Override
     public void save(Phone phone) {
-        Long key = phone.getKey();
+        final Long key = phone.getKey();
         if (key != null){
             jdbcTemplate.update(UPDATE, ps -> setQueryValues(phone, ps, key));
         } else {
@@ -63,6 +58,11 @@ public class JdbcPhoneDao implements ProductDao<Phone> {
 
     @Override
     public void close() {}
+
+    @Resource(name = "dataSource")
+    public void setDataSource(DataSource dataSource) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
+    }
 
     private static Phone setPhoneProperties(Phone phone, ResultSet rs) throws SQLException {
         phone.setKey(rs.getLong("id"));
@@ -85,6 +85,7 @@ public class JdbcPhoneDao implements ProductDao<Phone> {
         ps.setString(i++, phone.getWidth());
         ps.setString(i++, phone.getCamera());
         ps.setBigDecimal(i++, phone.getPrice());
-        if ( key != null ) ps.setLong(i++, phone.getKey());
+        if ( key != null ) ps.setLong(i, key);
     }
+
 }
