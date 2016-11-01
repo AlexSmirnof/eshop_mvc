@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 /**
  * Created by Alex108 on 23.10.2016.
  */
-@Service("userService")
+@Service
 public class UserService {
 
     private UserDao userDao;

@@ -59,5 +59,10 @@
         </p>
     </div>
 </div>
+
+<script>
+    AddToCart();
+</script>
+
 </body>
 </html>

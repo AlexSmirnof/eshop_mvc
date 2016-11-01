@@ -59,5 +59,9 @@
     </div>
 </div>
 
+<script>
+    DeleteFromCart();
+</script>
+
 </body>
 </html>
