@@ -53,10 +53,18 @@
                 <td>${product.camera}</td>
             </tr>
         </table>
-        <p>
-            <input type="text"  class="quantityField" key="${product.key}" size="10" value="1"/>
-            <button class="addToCartBtn" key="${product.key}">Add to cart</button>
-        </p>
+       <table class="details-buttons">
+           <tr>
+               <td>
+                   <input type="text"  class="quantityField" key="${product.key}" size="10" value="1"/>
+                   <span class="error"></span>
+               </td>
+               <td>
+                   <button class="addToCartBtn" key="${product.key}">Add to cart</button>
+               </td>
+           </tr>
+
+       </table>
     </div>
 </div>
 

@@ -59,6 +59,7 @@ public class CartService {
 
     private static void updateCartWithoutProduct(Cart cart, Phone phone, Long quantity){
         int index = findIndexOfProductInCart(cart, phone);
+        if ( index < 0 ) throw new RuntimeException("This product is already deleted.");
         Long oldQuantity = cart.getOrderItems().get(index).getQuantity();
         if (oldQuantity > quantity) {
             cart.getOrderItems().get(index).setQuantity(Long.sum(oldQuantity, -quantity));

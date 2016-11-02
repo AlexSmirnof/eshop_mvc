@@ -1,9 +1,10 @@
 (function(window){
 
     var path;
-    var selector;
-    var quantity;
     var data;
+    var selector;
+    var inputField;
+    var quantity;
     
     function doPost( path, data, onSuccess, onError ){
         $.ajax({
@@ -15,15 +16,38 @@
         });
     };
     
-    function showError(data,error,status){
-        console.log(error);
-        alert("Data: " + data + "\nStatus: " + status);
-//      $('quantity').html("<i style=\"color:red\">An error occured</i>");
+    function showError(data, status){
+        console.log('showError');
+        inputField.addClass('errorBorder');
+        if(!data.responseText){
+            inputField.next().html('<br/>' + data.replace("Error: ",""));
+        } else {
+            if(data.status == 400){
+                inputField.next().html('<br/>' + 'Incorrect number format input');
+            } else if(data.status == 500){
+                var start = data.responseText.indexOf('Exception:');
+                var end = data.responseText.indexOf('.', start);
+                var errorMessage = data.responseText.substring(start + 11, end);
+                inputField.next().html('<br/>' + errorMessage);
+            }
+        }
     };
-    
+
+    function clearErrors() {
+        console.log('clearErrors');
+        $('.quantityField').filter('.errorBorder').each(function () {
+            $(this).removeClass('errorBorder');
+            $(this).next().html("");
+        });
+    };
+
     function updateCartWidget(data) {
         console.log(data);
-        if (data.indexOf('Error:') === 0) return;
+        if (data.indexOf('Error:') === 0) {
+            showError(data);
+            return;
+        }
+        clearErrors();
         $.get(
             'cart/getCartJson',
             {},
@@ -41,8 +65,8 @@
         console.log('sendAdd');
         path = 'cart/addProductToCart/'.concat(key);
         selector = '.quantityField[key='.concat(key).concat(']');
-        quantity = $(selector).val();
-        // if( quantity <= 0 ) return;
+        inputField = $(selector);
+        quantity = inputField.val();
         data = 'quantity='.concat(quantity);
         console.log('path: ' + path);
         console.log('data: ' + data);
@@ -54,8 +78,8 @@
         console.log('sendDelete');
         path = 'cart/deleteProductFromCart/'.concat(key);
         selector = '.quantityField[key='.concat(key).concat(']');
-        quantity = $(selector).val();
-        // if( quantity <= 0 ) return;
+        inputField = $(selector);
+        quantity = inputField.val();
         data = 'quantity='.concat(quantity);
         console.log('path: ' + path);
         console.log('data: ' + data);

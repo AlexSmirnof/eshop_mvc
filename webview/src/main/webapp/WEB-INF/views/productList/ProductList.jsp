@@ -36,7 +36,9 @@
                     <td>${product.color}</td>
                     <td>${product.displaySize}</td>
                     <td>${product.price}</td>
-                    <td><input type="text"  class="quantityField" key="${product.key}" size="5" value="1"/></td>
+                    <td><input type="text"  class="quantityField" key="${product.key}" size="10" value="1"/>
+                        <span class="error"></span>
+                    </td>
                     <td><button class="addToCartBtn" key="${product.key}">Add to cart</button></td>
                 </tr>
             </c:forEach>

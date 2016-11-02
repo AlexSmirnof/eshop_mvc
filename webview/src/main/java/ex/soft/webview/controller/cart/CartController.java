@@ -72,7 +72,7 @@ public class CartController {
         }
     }
 
-    @RequestMapping(value = "/getCartJson", method = RequestMethod.GET /*produces = "application/json"*/)
+    @RequestMapping(value = "/getCartJson", method = RequestMethod.GET)
     public @ResponseBody String getCartJson(HttpSession session){
         System.out.println("GET Json");
         Cart cart = (Cart) session.getAttribute("cart");

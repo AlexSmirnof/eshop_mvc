@@ -47,14 +47,20 @@
                     <td>${product.color}</td>
                     <td>${product.displaySize}</td>
                     <td>${product.price}</td>
-                    <td><input type="text" class="quantityField" key="${product.key}" size="5" value="${orderItem.quantity}"/></td>
+                    <td><input type="text" class="quantityField" key="${product.key}" size="10" value="${orderItem.quantity}"/>
+                        <span class="error"></span>
+                    </td>
                     <td><button class="deleteFromCartBtn" key="${product.key}">Delete</button></td>
                 </tr>
             </c:forEach>
         </table>
-        <div class="cartBtns">
-            <button id="updateCartBtn"/>Update</button>
-            <button id="goToOrderBtn"/>Order</button>
+        <div class="cartBtns cartForms">
+            <form action="">
+                <button/>Update</button>
+            </form>
+            <form action="/">
+                <button/>Order</button>
+            </form>
         </div>
     </div>
 </div>

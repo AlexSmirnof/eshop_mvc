@@ -1,3 +1,11 @@
+.error{
+    line-height: 2.0;
+    font-size: 12px;
+    color: red;
+}
+.errorBorder{
+    border: 1px solid #f00;
+}
 /*header styles*/
 header{
     border-bottom: 1px solid #000;
@@ -68,7 +76,7 @@ table {
 }
 table.details{
     width:25%;
-    margin: 30px 0 20px;
+    margin: 30px 0 0;
 }
 table.cart{
     margin: 10px 0;
@@ -90,4 +98,27 @@ table th, table tr:nth-child(odd) {
 }
 table tr:nth-child(even) {
     background-color:#fff;
+}
+table.details-buttons{
+    width:25%;
+    border: 0;
+    margin: 0;
+}
+table.details-buttons td{
+    border: 0;
+    background-color: #fff;
+    padding: 20px 0 0 0;
+    text-align: center;
+    vertical-align: text-top;
+}
+table.details-buttons td:first-child{
+    width: 50%;
+    text-align: right;
+}
+.cartForms{
+    text-align: right;
+}
+.cartForms form{
+    display:inline-block;
+    margin-left: 10px;
 }
