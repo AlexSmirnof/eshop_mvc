@@ -90,13 +90,12 @@
         console.log("addToCart ready");
         $('.addToCartBtn').each(function () {
             console.log('find addBtn with key=' + this.getAttribute('key'));
-            var btn = this;
-            btn.onclick = function () {
+            $(this).on('click',function () {
                 var key = this.getAttribute("key");
                 console.log('--------------------------------');
                 console.log('click on addBtn with key=' + key);
                 sendAdd(key);
-            };
+            });
         });
     };
 

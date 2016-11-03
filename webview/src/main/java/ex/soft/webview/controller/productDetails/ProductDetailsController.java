@@ -27,7 +27,6 @@ public class ProductDetailsController {
 
     @ModelAttribute("cart")
     public Cart showCartWidget(HttpSession session) {
-        System.out.println("show cart widget");
         return cartService.getCart(session);
     }
 

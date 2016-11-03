@@ -38,7 +38,6 @@ public class CartService {
 
     private static Cart getCartSafely(HttpSession session){
         Cart cart = (Cart) session.getAttribute("cart");
-        System.out.println(cart);
         return cart != null ? cart : new Cart();
     }
 
@@ -52,9 +51,7 @@ public class CartService {
             cart.getOrderItems().get(index).setQuantity(newQuantity);
         }
         updateCartTotalQuantity(cart, quantity);
-        System.out.println(cart.getTotalPrice());
         updateCartTotalPrice(cart, phone.getPrice(), quantity, false);
-        System.out.println(cart.getTotalPrice());
     }
 
     private static void updateCartWithoutProduct(Cart cart, Phone phone, Long quantity){

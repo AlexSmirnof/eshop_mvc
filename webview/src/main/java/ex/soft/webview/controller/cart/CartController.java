@@ -4,6 +4,7 @@ import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Phone;
 import ex.soft.service.CartService;
 import ex.soft.service.PhoneService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,8 @@ import javax.validation.constraints.Size;
 @SessionAttributes("cart")
 public class CartController {
 
+    private static final Logger LOGGER = Logger.getLogger(CartController.class);
+
     @Autowired
     private PhoneService phoneService;
 
@@ -29,7 +32,9 @@ public class CartController {
 
     @ModelAttribute("cart")
     public Cart showCartWidget(HttpSession session) {
-        System.out.println("show cart widget");
+        LOGGER.info("Show Cart Widget");
+        System.out.println("Show Widget");
+        System.out.println(LOGGER);
         return cartService.getCart(session);
     }
 
@@ -42,11 +47,12 @@ public class CartController {
     public @ResponseBody String addProductToCart(@Valid @Size(min = 1) @ModelAttribute("quantity") Long quantity, BindingResult result,
                                                  @PathVariable("key") Long productId,
                                                  HttpSession session ){
-        System.out.println("AJAX: key="+ productId + " quan=" + quantity);
+        LOGGER.info("ADD: key="+ productId + " quan=" + quantity);
         if (result.hasErrors()){
-            System.out.println("ERROR " + result.toString());
+            LOGGER.error(result.toString());
             return "Error: Invalid quantity number";
         } else if (quantity <= 0){
+            LOGGER.error("Quantity must be greater than 0");
             return "Error: Quantity must be greater than 0";
         } else {
             Phone phone = phoneService.getProduct(productId);
@@ -59,11 +65,12 @@ public class CartController {
     public @ResponseBody String deleteProductFromCart(@Valid @Size(min = 1) @ModelAttribute("quantity") Long quantity, BindingResult result,
                                                       @PathVariable("key") Long productId,
                                                       HttpSession session){
-        System.out.println("DELETE: key="+ productId + " quan=" + quantity);
+        LOGGER.info("DELETE: key="+ productId + " quan=" + quantity);
         if (result.hasErrors()){
-            System.out.println("ERROR " + result.toString());
+            LOGGER.error(result.toString());
             return "Error: Invalid quantity number";
         } else if (quantity <= 0){
+            LOGGER.error("Quantity must be greater than 0");
             return "Error: Quantity must be greater than 0";
         } else {
             Phone phone = phoneService.getProduct(productId);
@@ -74,12 +81,12 @@ public class CartController {
 
     @RequestMapping(value = "/getCartJson", method = RequestMethod.GET)
     public @ResponseBody String getCartJson(HttpSession session){
-        System.out.println("GET Json");
+        LOGGER.info("AJAX: Get Json");
         Cart cart = (Cart) session.getAttribute("cart");
-        System.out.println(cart);
+        LOGGER.info(cart);
         cart = cart == null ? new Cart() : cart;
         String data = String.format("{\"quantity\":%d, \"price\":%s}", cart.getTotalQuantity(), cart.getTotalPrice());
-        System.out.println(data);
+        LOGGER.info("Data: " + data);
         return data;
     }
 

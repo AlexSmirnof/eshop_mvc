@@ -26,6 +26,10 @@
         <property name="url" value="${jdbc.mysql.url}"/>
         <property name="username" value="${jdbc.mysql.user}"/>
         <property name="password" value="${jdbc.mysql.password}"/>
+        <!--<property name="driverClassName" value="${jdbc.hsqldb.driverClass}"/>-->
+        <!--<property name="url" value="${jdbc.hsqldb.url}"/>-->
+        <!--<property name="username" value="${jdbc.hsqldb.username}"/>-->
+        <!--<property name="password" value="${jdbc.hsqldb.password}"/>-->
     </bean>
 
     <!--<jdbc:initialize-database data-source="dataSource" enabled="#{systemProperties.INITIALIZE_DATABASE}">-->

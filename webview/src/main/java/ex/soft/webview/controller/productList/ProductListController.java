@@ -32,7 +32,6 @@ public class ProductListController {
 
     @ModelAttribute("cart")
     public Cart showCartWidget(HttpSession session) {
-        System.out.println("show cart widget");
         return cartService.getCart(session);
     }
 
@@ -40,7 +39,6 @@ public class ProductListController {
     public String showProductList(Model model){
         List<Phone> productList = phoneService.listProducts();
         model.addAttribute("productList", productList);
-        System.out.println("PRODUCTS: " + productList);
         return "productList/productList";
     }
 
