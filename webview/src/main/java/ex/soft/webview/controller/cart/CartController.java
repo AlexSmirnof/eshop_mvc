@@ -4,6 +4,7 @@ import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Phone;
 import ex.soft.service.CartService;
 import ex.soft.service.PhoneService;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,8 +34,6 @@ public class CartController {
     @ModelAttribute("cart")
     public Cart showCartWidget(HttpSession session) {
         LOGGER.info("Show Cart Widget");
-        System.out.println("Show Widget");
-        System.out.println(LOGGER);
         return cartService.getCart(session);
     }
 
@@ -49,10 +48,10 @@ public class CartController {
                                                  HttpSession session ){
         LOGGER.info("ADD: key="+ productId + " quan=" + quantity);
         if (result.hasErrors()){
-            LOGGER.error(result.toString());
+            LOGGER.getLoggerRepository().getLogger("java.lang.Exception").log(Level.ERROR,result.toString());
             return "Error: Invalid quantity number";
         } else if (quantity <= 0){
-            LOGGER.error("Quantity must be greater than 0");
+            LOGGER.getLoggerRepository().getLogger("java.lang.Exception").log(Level.ERROR,"Quantity must be greater than 0");
             return "Error: Quantity must be greater than 0";
         } else {
             Phone phone = phoneService.getProduct(productId);
@@ -67,10 +66,10 @@ public class CartController {
                                                       HttpSession session){
         LOGGER.info("DELETE: key="+ productId + " quan=" + quantity);
         if (result.hasErrors()){
-            LOGGER.error(result.toString());
+            LOGGER.getLoggerRepository().getLogger("java.lang.Exception").log(Level.ERROR,result.toString());
             return "Error: Invalid quantity number";
         } else if (quantity <= 0){
-            LOGGER.error("Quantity must be greater than 0");
+            LOGGER.getLoggerRepository().getLogger("java.lang.Exception").log(Level.ERROR,"Quantity must be greater than 0");
             return "Error: Quantity must be greater than 0";
         } else {
             Phone phone = phoneService.getProduct(productId);

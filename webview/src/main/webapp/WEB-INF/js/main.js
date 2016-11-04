@@ -1,7 +1,6 @@
 (function(window){
 
     var path;
-    var data;
     var selector;
     var inputField;
     var quantity;
@@ -22,14 +21,15 @@
         if(!data.responseText){
             inputField.next().html('<br/>' + data.replace("Error: ",""));
         } else {
-            if(data.status == 400){
-                inputField.next().html('<br/>' + 'Incorrect number format input');
-            } else if(data.status == 500){
-                var start = data.responseText.indexOf('Exception:');
-                var end = data.responseText.indexOf('.', start);
-                var errorMessage = data.responseText.substring(start + 11, end);
-                inputField.next().html('<br/>' + errorMessage);
-            }
+            document.write(data.responseText);
+            // if(data.status == 400){
+            //     inputField.next().html('<br/>' + 'Incorrect number format input');
+            // } else if(data.status == 500){
+            //     var start = data.responseText.indexOf('Exception:');
+            //     var end = data.responseText.indexOf('.', start);
+            //     var errorMessage = data.responseText.substring(start + 11, end);
+            //     inputField.next().html('<br/>' + errorMessage);
+            // }
         }
     };
 
@@ -67,10 +67,9 @@
         selector = '.quantityField[key='.concat(key).concat(']');
         inputField = $(selector);
         quantity = inputField.val();
-        data = 'quantity='.concat(quantity);
         console.log('path: ' + path);
-        console.log('data: ' + data);
-        doPost( path, data, updateCartWidget, showError );
+        console.log('quantity: ' + quantity);
+        doPost( path, { quantity: quantity }, updateCartWidget, showError );
 
     };
 
@@ -80,10 +79,9 @@
         selector = '.quantityField[key='.concat(key).concat(']');
         inputField = $(selector);
         quantity = inputField.val();
-        data = 'quantity='.concat(quantity);
         console.log('path: ' + path);
-        console.log('data: ' + data);
-        doPost( path, data, updateCartWidget, showError );
+        console.log('quantity: ' + quantity);
+        doPost( path, { quantity: quantity }, updateCartWidget, showError );
     };
     
     window.AddToCart = function () {
