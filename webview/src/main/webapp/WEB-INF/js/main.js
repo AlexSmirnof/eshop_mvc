@@ -21,15 +21,15 @@
         if(!data.responseText){
             inputField.next().html('<br/>' + data.replace("Error: ",""));
         } else {
-            document.write(data.responseText);
-            // if(data.status == 400){
-            //     inputField.next().html('<br/>' + 'Incorrect number format input');
-            // } else if(data.status == 500){
-            //     var start = data.responseText.indexOf('Exception:');
-            //     var end = data.responseText.indexOf('.', start);
-            //     var errorMessage = data.responseText.substring(start + 11, end);
-            //     inputField.next().html('<br/>' + errorMessage);
-            // }
+            console.log(data.responseText);
+            if(data.status == 400){
+                inputField.next().html('<br/>' + 'Incorrect number format input');
+            } else if(data.status == 500){
+                var start = data.responseText.indexOf('Exception:');
+                var end = data.responseText.indexOf('.', start);
+                var errorMessage = data.responseText.substring(start + 11, end);
+                inputField.next().html('<br/>' + errorMessage);
+            }
         }
     };
 

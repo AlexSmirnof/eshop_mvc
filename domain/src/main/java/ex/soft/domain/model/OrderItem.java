@@ -8,11 +8,8 @@ public class OrderItem {
     private Phone phone;
     private Long quantity;
 
-    public OrderItem() {}
-
-    public OrderItem(Phone phone, Long quantity) {
-        this.phone = phone;
-        this.quantity = quantity;
+    public OrderItem() {
+        quantity = Long.valueOf(0L);
     }
 
     public Phone getPhone() {

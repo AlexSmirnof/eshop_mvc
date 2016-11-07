@@ -1,33 +1,19 @@
 package ex.soft.domain.model;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 /**
  * Created by Alex108 on 11.10.2016.
  */
-public class Order {
+public class Order extends AbstractCart{
 
     private Long key;
     private String firstName;
     private String lastName;
     private String deliveryAddress;
     private String contactPhoneNo;
-    private BigDecimal totalPrice;
-    private List<OrderItem> orderItems;
     private Long userId;
 
-    public Order() {}
-
-    public Order(Long key, String firstName, String lastName, String deliveryAddress, String contactPhoneNo, BigDecimal totalPrice, List<OrderItem> orderItems, Long userId) {
-        this.key = key;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.deliveryAddress = deliveryAddress;
-        this.contactPhoneNo = contactPhoneNo;
-        this.totalPrice = totalPrice;
-        this.orderItems = orderItems;
-        this.userId = userId;
+    public Order() {
+        super();
     }
 
     public Long getKey() {
@@ -70,22 +56,6 @@ public class Order {
         this.contactPhoneNo = contactPhoneNo;
     }
 
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -101,12 +71,23 @@ public class Order {
 
         Order that = (Order) o;
 
-        return key != null ? key.equals(that.getKey()) : false;
+        return key != null ? key.equals(that.key) : false;
     }
 
     @Override
     public int hashCode() {
-        return key != null ? key.hashCode() : 0;
+        return key.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "key=" + key +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", contactPhoneNo='" + contactPhoneNo + '\'' +
+                ", userId=" + userId + "\', " +
+                 super.toString() + '}';
+    }
 }

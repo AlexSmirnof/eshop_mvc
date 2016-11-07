@@ -3,9 +3,10 @@ package ex.soft.service;
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.OrderItem;
 import ex.soft.domain.model.Phone;
+import ex.soft.service.api.ICartService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,63 +15,90 @@ import java.util.List;
  * Created by Alex108 on 19.10.2016.
  */
 @Service
-public class CartService {
+public class CartService implements ICartService {
 
-    @Transactional
+    private static final String CART_ATTRIBUTE_NAME = "cart";
+
+    @Resource
+    private Cart cart;
+
+    @Override
     public Cart getCart(HttpSession session){
-       return getCartSafely(session);
+        return getCartSafely(session);
     }
 
-    @Transactional
-    public void addProductToCart(HttpSession session, Phone phone, Long quantity){
+    @Override
+    public void removeCart(HttpSession session){
+       session.removeAttribute(CART_ATTRIBUTE_NAME);
+    }
+
+    @Override
+    public void updateCart(HttpSession session, List<OrderItem> orderItems) {
         Cart cart = getCartSafely(session);
-        updateCartWithNewProduct(cart, phone, quantity);
-        session.setAttribute("cart", cart);
+        cart.setOrderItems(orderItems);
+        updateCartTotalPriceAndQuantity(cart);
+        session.setAttribute(CART_ATTRIBUTE_NAME, cart);
     }
 
-    @Transactional
-    public void deleteProductFromCart(HttpSession session, Phone phone, Long quantity){
+    @Override
+    public Long addToCart(HttpSession session, OrderItem orderItem){
         Cart cart = getCartSafely(session);
-        updateCartWithoutProduct(cart, phone, quantity);
-        session.setAttribute("cart", cart);
+        updateCartWithNewProduct(cart, orderItem.getPhone(), orderItem.getQuantity());
+        session.setAttribute(CART_ATTRIBUTE_NAME, cart);
+        return orderItem.getQuantity();
+    }
+
+    @Override
+    public Long deleteFromCart(HttpSession session, OrderItem orderItem){
+        Cart cart = getCartSafely(session);
+        Long res = updateCartWithoutProduct(cart, orderItem.getPhone(), orderItem.getQuantity());
+        session.setAttribute(CART_ATTRIBUTE_NAME, cart);
+        return res;
     }
 
 
-    private static Cart getCartSafely(HttpSession session){
-        Cart cart = (Cart) session.getAttribute("cart");
+    private Cart getCartSafely(HttpSession session){
+        Cart cart = (Cart) session.getAttribute(CART_ATTRIBUTE_NAME);
         return cart != null ? cart : new Cart();
     }
 
-    private static void updateCartWithNewProduct(Cart cart, Phone phone, Long quantity){
-        int index = findIndexOfProductInCart(cart, phone);
+    private void updateCartWithNewProduct(Cart cart, Phone phone, Long quantity){
+        int index = findIndexOfProductInCart(cart.getOrderItems(), phone);
+//  if phone not exist in cart
         if( index < 0 ){
-            cart.getOrderItems().add(new OrderItem(phone, quantity));
+            OrderItem newOrderItem = new OrderItem();
+            newOrderItem.setPhone(phone);
+            newOrderItem.setQuantity(quantity);
+            cart.getOrderItems().add(newOrderItem);
+//  phone already exist in cart so we increase oldQuantity of that phone
         } else {
             Long oldQuantity = cart.getOrderItems().get(index).getQuantity();
             Long newQuantity = Long.sum(oldQuantity, quantity);
             cart.getOrderItems().get(index).setQuantity(newQuantity);
         }
-        updateCartTotalQuantity(cart, quantity);
-        updateCartTotalPrice(cart, phone.getPrice(), quantity, false);
+        updateCartTotalPriceAndQuantity(cart);
     }
 
-    private static void updateCartWithoutProduct(Cart cart, Phone phone, Long quantity){
-        int index = findIndexOfProductInCart(cart, phone);
-        if ( index < 0 ) throw new RuntimeException("This product is already deleted.");
-        Long oldQuantity = cart.getOrderItems().get(index).getQuantity();
-        if (oldQuantity > quantity) {
-            cart.getOrderItems().get(index).setQuantity(Long.sum(oldQuantity, -quantity));
-            updateCartTotalQuantity(cart, -quantity);
-            updateCartTotalPrice(cart, phone.getPrice(), quantity, true);
-        } else {
-            cart.getOrderItems().remove(index);
-            updateCartTotalQuantity(cart, -oldQuantity);
-            updateCartTotalPrice(cart, phone.getPrice(), oldQuantity, true);
+    private Long updateCartWithoutProduct(Cart cart, Phone phone, Long quantity){
+        int index = findIndexOfProductInCart(cart.getOrderItems(), phone);
+//  if phone not exist in cart -> index = -1
+        if ( index < 0 ) {
+            throw new RuntimeException("This product is already deleted.");
         }
+        Long oldQuantity = cart.getOrderItems().get(index).getQuantity();
+//  if input quantity greater or equal to real quantity of phone in cart
+        if (oldQuantity <= quantity) {
+            quantity = oldQuantity;
+            cart.getOrderItems().remove(index);
+        } else {
+            Long newQuantity = Long.sum(oldQuantity, -quantity);
+            cart.getOrderItems().get(index).setQuantity(newQuantity);
+        }
+        updateCartTotalPriceAndQuantity(cart);
+        return quantity;
     }
 
-    private static int findIndexOfProductInCart(Cart cart, Phone phone){
-        List<OrderItem> orderItems = cart.getOrderItems();
+    private int findIndexOfProductInCart(List<OrderItem> orderItems, Phone phone){
         int index = 0;
         for (OrderItem orderItem : orderItems) {
             if (orderItem.getPhone().equals(phone)) {
@@ -81,16 +109,30 @@ public class CartService {
         return -1;
     }
 
-    private static void updateCartTotalQuantity(Cart cart, Long quantity){
-        Long totalQuantity = Long.sum(cart.getTotalQuantity(), quantity);
-        cart.setTotalQuantity(totalQuantity);
+    private void updateCartTotalPriceAndQuantity(Cart cart){
+        BigDecimal newTotalPrice = computeCartTotalPrice(cart);
+        Long newTotalQuantity = computeCartTotalQuantity(cart);
+        cart.setTotalPrice(newTotalPrice);
+        cart.setTotalQuantity(newTotalQuantity);
     }
 
-    private static void updateCartTotalPrice(Cart cart, BigDecimal productPrice, Long quantity, boolean subtract){
-        BigDecimal oldTotalPrice = cart.getTotalPrice();
-        productPrice = productPrice.multiply(BigDecimal.valueOf(quantity.longValue()));
-        BigDecimal totalPrice = subtract ? oldTotalPrice.subtract(productPrice) : oldTotalPrice.add(productPrice);
-        cart.setTotalPrice(totalPrice);
+    private BigDecimal computeCartTotalPrice(Cart cart){
+        return cart.getOrderItems()
+                .stream()
+                .map(item -> item.getPhone().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.valueOf(0), BigDecimal::add);
+    }
+
+    private Long computeCartTotalQuantity(Cart cart){
+        return cart.getOrderItems()
+                .stream()
+                .mapToLong(item -> item.getQuantity())
+                .sum();
+    }
+
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
 

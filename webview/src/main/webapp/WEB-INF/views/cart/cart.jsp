@@ -2,6 +2,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="productList" value="${pageContext.request.contextPath}/productList" scope="page"/>
+<c:set var="cartPage" value="${pageContext.request.contextPath}/cart" scope="page"/>
 <html>
 <head>
     <title>Cart</title>
@@ -26,7 +28,7 @@
     </div>
     <div class="row">
         <nav class="cart">
-            <a href="<c:url value="productList"/>"><button class="back">Back to product list</button></a>
+            <a href="${productList}"><button class="back">Back to product list</button></a>
             <a href="#"><button class="forward">Order</button></a>
         </nav>
     </div>
@@ -47,27 +49,28 @@
                     <td>${product.color}</td>
                     <td>${product.displaySize}</td>
                     <td>${product.price}</td>
-                    <td><input type="text" class="quantityField" key="${product.key}" size="10" value="${orderItem.quantity}"/>
+                    <td>
+                        <input type="text" form="cart" class="quantityField" name="${product.key}" size="10" value="${orderItem.quantity}"/>
                         <span class="error"></span>
                     </td>
-                    <td><button class="deleteFromCartBtn" key="${product.key}">Delete</button></td>
+                    <td>
+                        <button form="cart" formaction="${cartPage}/delete/${product.key}" class="deleteFromCartBtn">Delete</button>
+                    </td>
                 </tr>
             </c:forEach>
         </table>
         <div class="cartBtns cartForms">
-            <form action="">
-                <button/>Update</button>
+            <form id="cart" action="${cartPage}/update" method="POST">
+                <span class="error"></span>
+                <button>Update</button>
             </form>
-            <form action="/">
+            <form action="order">
                 <button/>Order</button>
             </form>
         </div>
     </div>
 </div>
 
-<script>
-    DeleteFromCart();
-</script>
 
 </body>
 </html>

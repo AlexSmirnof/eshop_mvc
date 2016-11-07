@@ -16,7 +16,9 @@ public class Phone {
     private String camera;
     private BigDecimal price;
 
-    public Phone() {}
+    public Phone() {
+        price = BigDecimal.valueOf(0);
+    }
 
     public Phone(Long key, String model, String color, String displaySize, String length, String width, String camera, BigDecimal price) {
         this.key = key;
