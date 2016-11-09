@@ -1,24 +1,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Product Details</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" text="text/css" href="<c:url value="/css/styles.css"/>" >
-    <script type="text/javascript" src="<c:url value="/js/jquery-3.1.1.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/js/main.js"/>"></script>
+    <tag:style/>
+    <tag:script/>
 </head>
 <body>
 
 <div class="container">
     <div class="row">
-        <header>
-            <div class="phone"><span class="glyphicon glyphicon-phone"></span> Phonify</div> <%--Gallivant--%>
-            <button id="cartBtn"><u>My cart:</u> <span id="cartItems">${empty cart.totalQuantity ? 0 : cart.totalQuantity}</span>
-                items <span id="cartPrice">${empty cart.totalPrice ? 0 : cart.totalPrice}</span>$
-            </button>
-            <div class="clear"></div>
-        </header>
+        <tag:header/>
     </div>
     <div class="row">
         <nav>
@@ -27,7 +20,7 @@
     </div>
     <div class="row">
         <h2>${product.model}</h2>
-        <table class="details">
+        <table class="product details">
             <tr>
                 <td>Display</td>
                 <td>${product.displaySize}</td>

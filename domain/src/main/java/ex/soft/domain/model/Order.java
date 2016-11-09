@@ -12,6 +12,10 @@ public class Order extends AbstractCart{
     private String contactPhoneNo;
     private Long userId;
 
+    {
+        System.out.println("+++++ORDER++++++++++++");
+    }
+
     public Order() {
         super();
     }

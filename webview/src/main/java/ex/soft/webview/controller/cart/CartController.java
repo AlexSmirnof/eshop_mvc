@@ -46,7 +46,7 @@ public class CartController {
         return "cart/cart";
     }
 
-    @RequestMapping(value = "/addProductToCart/{key}", method = RequestMethod.POST)
+    @RequestMapping(value = "/addProductToCart/{key:[\\d]+}", method = RequestMethod.POST)
     public @ResponseBody String addProductToCart(@Valid @Size(min = 1) @ModelAttribute("quantity") Long quantity, BindingResult result,
                                                  @PathVariable("key") Long productId,
                                                  HttpSession session ){

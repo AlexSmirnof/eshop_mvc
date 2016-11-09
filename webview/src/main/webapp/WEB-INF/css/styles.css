@@ -45,9 +45,7 @@ nav.cart{
 nav.cart button {
     display: inline-block;
     margin: 20px 0 0;
-}
-nav.cart button.forward {
-    width: 100px;
+    min-width: 150px;
 }
 
 /*button style*/
@@ -70,48 +68,73 @@ header button, nav button {
     margin: 20px 5px;
 }
 /*table styles*/
-table {
+.product {
     width:100%;
     margin:20px auto;
 }
-table.details{
+.details{
     width:25%;
     margin: 30px 0 0;
 }
-table.cart{
+.product.cart{
     margin: 10px 0;
 }
-table, th, td {
+.product, th, td {
     border: 1px solid black;
     border-collapse: collapse;
 }
-table th, table td {
+.product th, .product td {
+    padding: 15px;
+    text-align: left;
+}
+.details th, .details td {
     padding: 20px;
     text-align: left;
 }
-table.details th, table.details td {
-    padding: 10px;
-    text-align: left;
-}
-table th, table tr:nth-child(odd) {
+.product th, .product tr:nth-child(odd) {
     background-color: #eee;
 }
-table tr:nth-child(even) {
+.product tr:nth-child(even) {
     background-color:#fff;
 }
-table.details-buttons{
+.details-buttons{
     width:25%;
     border: 0;
     margin: 0;
 }
-table.details-buttons td{
+.details-buttons td{
     border: 0;
     background-color: #fff;
     padding: 20px 0 0 0;
     text-align: center;
     vertical-align: text-top;
 }
-table.details-buttons td:first-child{
+.order{
+    width: 40%;
+}
+.order td{
+    padding: 10px 0;
+    text-align: left;
+    border:none;
+}
+.order input[type="text"]{
+    width: 100%;
+    text-align: left;
+}
+.order textarea{
+    width: 100%;
+    min-height: 100px;
+}
+.order button{
+    min-height: 42px;
+    min-width: 100px;
+}
+.hideme{
+    visibility: hidden!important;
+}
+
+
+.details-buttons td:first-child{
     width: 50%;
     text-align: right;
 }

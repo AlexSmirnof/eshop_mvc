@@ -113,7 +113,7 @@
     
     /*переход на cart.jsp при клике на cartWidget*/
     $(document).ready(function() {
-        $('#cartBtn').bind('click', function () {
+        $('#cartWidget').bind('click', function () {
             location.href = 'cart';
         });
     });
