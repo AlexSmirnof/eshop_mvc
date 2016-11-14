@@ -24,6 +24,8 @@ CREATE MEMORY TABLE Orders(
     lastName VARCHAR(255) NOT NULL,
     deliveryAddress VARCHAR(255) NOT NULL,
     contactPhoneNo VARCHAR(55),
+    description VARCHAR(255),
+    totalQuantity BIGINT NOT NULL,
     totalPrice 	DECIMAL(10,2) NOT NULL,
     userId BIGINT NOT NULL,
     PRIMARY KEY(id)

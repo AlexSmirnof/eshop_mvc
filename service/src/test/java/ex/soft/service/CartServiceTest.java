@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
@@ -26,7 +25,7 @@ public class CartServiceTest {
 
     private ICartService cartService;
 
-    public Phone phone = new Phone(null, "Samsung Galaxy S6 16GB", "black", "4\"", "14mm","56mm","12MP",new BigDecimal("250.00"));
+    public Phone phone = new Phone();
 
     @Mock
     private HttpSession session;

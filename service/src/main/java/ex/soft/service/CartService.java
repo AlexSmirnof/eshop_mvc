@@ -15,7 +15,7 @@ import java.util.List;
  * Created by Alex108 on 19.10.2016.
  */
 @Service
-public class CartService implements ICartService {
+public class CartService implements ICartService{
 
     private static final String CART_ATTRIBUTE_NAME = "cart";
 
@@ -33,27 +33,25 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public void updateCart(HttpSession session, List<OrderItem> orderItems) {
-        Cart cart = getCartSafely(session);
-        cart.setOrderItems(orderItems);
+    public void updateCart(HttpSession session, Cart cart) {
         updateCartTotalPriceAndQuantity(cart);
         session.setAttribute(CART_ATTRIBUTE_NAME, cart);
     }
 
     @Override
-    public Long addToCart(HttpSession session, OrderItem orderItem){
+    public Long addToCart(HttpSession session, Phone phone, Long quantity){
         Cart cart = getCartSafely(session);
-        updateCartWithNewProduct(cart, orderItem.getPhone(), orderItem.getQuantity());
+        updateCartWithNewProduct(cart, phone, quantity);
         session.setAttribute(CART_ATTRIBUTE_NAME, cart);
-        return orderItem.getQuantity();
+        return quantity;
     }
 
     @Override
-    public Long deleteFromCart(HttpSession session, OrderItem orderItem){
+    public Long deleteFromCart(HttpSession session, Long key){
         Cart cart = getCartSafely(session);
-        Long res = updateCartWithoutProduct(cart, orderItem.getPhone(), orderItem.getQuantity());
+        Long result = updateCartWithoutProduct(cart, key);
         session.setAttribute(CART_ATTRIBUTE_NAME, cart);
-        return res;
+        return result;
     }
 
 
@@ -63,7 +61,7 @@ public class CartService implements ICartService {
     }
 
     private void updateCartWithNewProduct(Cart cart, Phone phone, Long quantity){
-        int index = findIndexOfProductInCart(cart.getOrderItems(), phone);
+        int index = findIndexOfProductInCart(cart.getOrderItems(), phone.getKey());
 //  if phone not exist in cart
         if( index < 0 ){
             OrderItem newOrderItem = new OrderItem();
@@ -79,29 +77,21 @@ public class CartService implements ICartService {
         updateCartTotalPriceAndQuantity(cart);
     }
 
-    private Long updateCartWithoutProduct(Cart cart, Phone phone, Long quantity){
-        int index = findIndexOfProductInCart(cart.getOrderItems(), phone);
-//  if phone not exist in cart -> index = -1
+    private Long updateCartWithoutProduct(Cart cart, Long key){
+        int index = findIndexOfProductInCart(cart.getOrderItems(), key);
+//  if key not exist in cart items -> index = -1
         if ( index < 0 ) {
-            throw new RuntimeException("This product is already deleted.");
+            return 0L;
         }
-        Long oldQuantity = cart.getOrderItems().get(index).getQuantity();
-//  if input quantity greater or equal to real quantity of phone in cart
-        if (oldQuantity <= quantity) {
-            quantity = oldQuantity;
-            cart.getOrderItems().remove(index);
-        } else {
-            Long newQuantity = Long.sum(oldQuantity, -quantity);
-            cart.getOrderItems().get(index).setQuantity(newQuantity);
-        }
+        OrderItem removedItem = cart.getOrderItems().remove(index);
         updateCartTotalPriceAndQuantity(cart);
-        return quantity;
+        return removedItem.getQuantity();
     }
 
-    private int findIndexOfProductInCart(List<OrderItem> orderItems, Phone phone){
+    private int findIndexOfProductInCart(List<OrderItem> orderItems, Long key){
         int index = 0;
         for (OrderItem orderItem : orderItems) {
-            if (orderItem.getPhone().equals(phone)) {
+            if ( Long.compare(orderItem.getPhone().getKey(), key) == 0 ) {
                 return index;
             }
             index++;
@@ -120,7 +110,7 @@ public class CartService implements ICartService {
         return cart.getOrderItems()
                 .stream()
                 .map(item -> item.getPhone().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-                .reduce(BigDecimal.valueOf(0), BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private Long computeCartTotalQuantity(Cart cart){

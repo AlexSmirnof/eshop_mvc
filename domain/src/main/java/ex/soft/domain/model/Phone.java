@@ -17,18 +17,7 @@ public class Phone {
     private BigDecimal price;
 
     public Phone() {
-        price = BigDecimal.valueOf(0);
-    }
-
-    public Phone(Long key, String model, String color, String displaySize, String length, String width, String camera, BigDecimal price) {
-        this.key = key;
-        this.model = model;
-        this.color = color;
-        this.displaySize = displaySize;
-        this.length = length;
-        this.width = width;
-        this.camera = camera;
-        this.price = price;
+        price = BigDecimal.ZERO;
     }
 
     public Long getKey() {

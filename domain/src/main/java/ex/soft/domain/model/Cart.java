@@ -6,10 +6,8 @@ import org.springframework.stereotype.Component;
 
 @Component("cart")
 @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class Cart extends AbstractCart<Cart> {
+public class Cart extends AbstractCart {
 
-    public Cart() {
-        super();
-    }
+    public Cart() {}
 
 }

@@ -9,7 +9,7 @@ public class OrderItem {
     private Long quantity;
 
     public OrderItem() {
-        quantity = Long.valueOf(0L);
+        quantity = 0L;
     }
 
     public Phone getPhone() {

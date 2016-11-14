@@ -22,15 +22,7 @@
         <tag:header/>
     </div>
     <div class="row">
-        <c:choose>
-            <c:when test="${param.confirm}">
-                <h2>Thank you for your submission</h2>
-            </c:when>
-            <c:otherwise>
-                <h2>Order</h2>
-            </c:otherwise>
-        </c:choose>
-
+        <h2>Order</h2>
     </div>
     <div class="row">
         <nav class="cart">
@@ -79,101 +71,45 @@
     </div>
 
     <%--confirm: ${param.confirm}<br/>--%>
-    <%--class: ${order.getClass()}<br/>--%>
+    <%--class:   ${order.getClass()}<br/>--%>
     <%--bean:    ${order}<br/>--%>
-    <%--beanC:    ${orderC}<br/>--%>
-
-    <c:if test="${param.confirm}">
-        <%--beanName - создаст новый bean--%>
-        <%--class - сделает уже сущ-щий бин доступным в указ области--%>
-        <jsp:useBean id="order" class="ex.soft.domain.model.Order" scope="request" />
-        <jsp:setProperty name="order" property="*"/>
-    </c:if>
-
-    <%--after:    ${orderC}<br/>--%>
+    <%--beanC:   ${orderC}<br/>--%>
 
     <div class="row">
-        <form action="${orderPage}" method="POST">
+        <form action="${orderPage}/confirm" method="POST">
         <table class="order">
             <tr>
                 <td>First name</td>
                 <td>
-                    <c:choose>
-                        <c:when test="${param.confirm}">
-                            <jsp:getProperty name="order" property="firstName"/>
-                        </c:when>
-                        <c:otherwise>
-                            <input type="text" name="firstName" placeholder="First name" required>
-                        </c:otherwise>
-                   </c:choose>
+                    <input type="text" name="firstName" placeholder="First name" required>
                 </td>
             </tr>
             <tr>
                 <td>Last Name</td>
                 <td>
-                    <c:choose>
-                        <c:when test="${param.confirm}">
-                            <jsp:getProperty name="order" property="lastName"/>
-                        </c:when>
-                        <c:otherwise>
-                            <input type="text" name="lastName" placeholder="Last name" required>
-                        </c:otherwise>
-                    </c:choose>
+                    <input type="text" name="lastName" placeholder="Last name" required>
                 </td>
             </tr>
             <tr>
                 <td>Address</td>
                 <td>
-                    <c:choose>
-                        <c:when test="${param.confirm}">
-                            <jsp:getProperty name="order" property="deliveryAddress"/>
-                        </c:when>
-                        <c:otherwise>
-                            <input type="text" name="deliveryAddress" placeholder="Address" required>
-                        </c:otherwise>
-                    </c:choose>
+                    <input type="text" name="deliveryAddress" placeholder="Address" required>
                 </td>
             </tr>
             <tr>
                 <td>Phone</td>
                 <td>
-                    <c:choose>
-                        <c:when test="${param.confirm}">
-                            <jsp:getProperty name="order" property="contactPhoneNo"/>
-                        </c:when>
-                        <c:otherwise>
-                            <input type="text" name="contactPhoneNo" placeholder="Phone" required>
-                        </c:otherwise>
-                    </c:choose>
+                    <input type="text" name="contactPhoneNo" placeholder="Phone" required>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <c:choose>
-                        <c:when test="${param.confirm}">
-                            <%--<jsp:getProperty name="orderC" property="description"/>--%>
-                            desc: ${param.description}<br>
-                            quan:  <jsp:getProperty name="order" property="totalQuantity"/><br/>
-                            price:  <jsp:getProperty name="order" property="totalPrice"/><br/>
-                            items:  <jsp:getProperty name="order" property="orderItems"/>
-                        </c:when>
-                        <c:otherwise>
-                            <textarea name="description" placeholder="Additional information"></textarea>
-                        </c:otherwise>
-                    </c:choose>
+                     <textarea name="description" placeholder="Additional information"></textarea>
                 </td>
             </tr>
             <tr>
                 <td>
-                <c:choose>
-                    <c:when test="${param.confirm}">
-                        <button formaction="${productList}" formmethod="GET">Back To Shopping</button>
-                    </c:when>
-                    <c:otherwise>
-                        <input type="hidden" name="confirm" value="true"/>
-                        <button>Order</button>
-                    </c:otherwise>
-                </c:choose>
+                    <button>Order</button>
                 </td>
             </tr>
         </table>

@@ -7,15 +7,15 @@ import java.util.List;
 /**
  * Created by Alex108 on 05.11.2016.
  */
-public abstract class AbstractCart<T extends AbstractCart> {
+public abstract class AbstractCart{
 
     private Long totalQuantity;
     private BigDecimal totalPrice;
     private List<OrderItem> orderItems;
 
     public AbstractCart() {
-        totalQuantity = Long.valueOf(0L);
-        totalPrice = BigDecimal.valueOf(0);
+        totalQuantity = 0L;
+        totalPrice = BigDecimal.ZERO;
         orderItems = new ArrayList<>();
     }
 
@@ -41,21 +41,6 @@ public abstract class AbstractCart<T extends AbstractCart> {
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        T that = (T) o;
-
-        return orderItems != null ? orderItems.equals(that.getOrderItems()) : (that.getOrderItems() == null ? true : false);
-    }
-
-    @Override
-    public int hashCode() {
-        return getOrderItems().hashCode();
     }
 
     @Override

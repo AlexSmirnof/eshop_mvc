@@ -29,7 +29,7 @@
                     <td><a href="productDetails?model=${product.model}&key=${product.key}" target="_blank">${product.model}</a></td>
                     <td>${product.color}</td>
                     <td>${product.displaySize}</td>
-                    <td>${product.price}</td>
+                    <td>${product.price}$</td>
                     <td><input type="text"  class="quantityField" key="${product.key}" size="10" value="1"/>
                         <span class="error"></span>
                     </td>

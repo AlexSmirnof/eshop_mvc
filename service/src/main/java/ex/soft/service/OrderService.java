@@ -57,7 +57,6 @@ public class OrderService {
     }
 
 
-
     @Resource(name = "orderDao")
     public void setOrderDao(OrderDao orderDao) {
         this.orderDao = orderDao;

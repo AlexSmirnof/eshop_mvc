@@ -15,16 +15,6 @@ public class User {
 
     public User() {}
 
-    public User(Long key, String firstName, String lastName, String deliveryAddress, String contactPhoneNo, String login, String password) {
-        this.key = key;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.deliveryAddress = deliveryAddress;
-        this.contactPhoneNo = contactPhoneNo;
-        this.login = login;
-        this.password = password;
-    }
-
     public Long getKey() {
         return key;
     }
@@ -79,21 +69,6 @@ public class User {
 
     public void setContactPhoneNo(String contactPhoneNo) {
         this.contactPhoneNo = contactPhoneNo;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Order that = (Order) o;
-
-        return key != null ? key.equals(that.getKey()) : false;
-    }
-
-    @Override
-    public int hashCode() {
-        return key != null ? key.hashCode() : 0;
     }
 
     @Override

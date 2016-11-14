@@ -10,15 +10,10 @@ public class Order extends AbstractCart{
     private String lastName;
     private String deliveryAddress;
     private String contactPhoneNo;
+    private String description;
     private Long userId;
 
-    {
-        System.out.println("+++++ORDER++++++++++++");
-    }
-
-    public Order() {
-        super();
-    }
+    public Order() {}
 
     public Long getKey() {
         return key;
@@ -60,27 +55,20 @@ public class Order extends AbstractCart{
         this.contactPhoneNo = contactPhoneNo;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Long getUserId() {
         return userId;
     }
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Order that = (Order) o;
-
-        return key != null ? key.equals(that.key) : false;
-    }
-
-    @Override
-    public int hashCode() {
-        return key.hashCode();
     }
 
     @Override
@@ -91,6 +79,7 @@ public class Order extends AbstractCart{
                 ", lastName='" + lastName + '\'' +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", contactPhoneNo='" + contactPhoneNo + '\'' +
+                ", description='" + description + '\'' +
                 ", userId=" + userId + "\', " +
                  super.toString() + '}';
     }

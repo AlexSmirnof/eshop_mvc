@@ -23,12 +23,12 @@ import java.util.List;
 @Repository("orderDao")
 public class JdbcOrderDao implements OrderDao {
 
-    public static final String FIND_ALL = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, totalPrice, userId FROM Orders";
-    public static final String GET =      "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, totalPrice, userId FROM Orders WHERE id = :key";
-    public static final String INSERT =   "INSERT INTO Orders (firstName, lastName, deliveryAddress, contactPhoneNo, totalPrice, userId) " +
-                                                     "VALUES (:firstName, :lastName, :deliveryAddress, :contactPhoneNo, :totalPrice, :userId)";
+    public static final String FIND_ALL = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, userId FROM Orders";
+    public static final String GET =      "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, userId FROM Orders WHERE id = :key";
+    public static final String INSERT =   "INSERT INTO Orders (firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, userId) " +
+                                                     "VALUES (:firstName, :lastName, :deliveryAddress, :contactPhoneNo, :description, :totalQuantity, :totalPrice, :userId)";
     public static final String UPDATE =   "UPDATE Orders SET firstName = :firstName, lastName = :lastName, deliveryAddress = :deliveryAddress, " +
-                                                            "contactPhoneNo = :contactPhoneNo, totalPrice = :totalPrice, userId = :userId WHERE id = :key";
+                                                            "contactPhoneNo = :contactPhoneNo, description = :description, totalQuantity = :totalQuantity, totalPrice = :totalPrice, userId = :userId WHERE id = :key";
     public static final String FIND_ALL_ORDER_ITEMS_BY_KEY = "SELECT phone_id, quantity FROM OrderItems WHERE order_id = :order_id";
     public static final String GET_ORDER_ITEM_BY_KEY =       "SELECT phone_id, quantity FROM OrderItems WHERE order_id = :key";
     public static final String INSERT_ORDER_ITEM =           "INSERT INTO OrderItems (phone_id, quantity, order_id) VALUES (:phone_id, :quantity, :order_id)";
@@ -76,16 +76,14 @@ public class JdbcOrderDao implements OrderDao {
             SqlParameterSource paramSource = setOrderValues(order, new MapSqlParameterSource(), null);
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(INSERT, paramSource, keyHolder);
-            for (Object item: order.getOrderItems()){
-                OrderItem orderItem = (OrderItem) item;
+            for (OrderItem orderItem: order.getOrderItems()){
                 SqlParameterSource paramSourceOrderItem = setOrderItemValues(orderItem, new MapSqlParameterSource(), (Long) keyHolder.getKey());
                 jdbcTemplate.update(INSERT_ORDER_ITEM, paramSourceOrderItem);
             }
         } else {
             SqlParameterSource paramSource = setOrderValues(order, new MapSqlParameterSource(), key);
             jdbcTemplate.update(UPDATE, paramSource);
-            for (Object item: order.getOrderItems()){
-                OrderItem orderItem = (OrderItem) item;
+            for (OrderItem orderItem: order.getOrderItems()){
                 SqlParameterSource paramSourceOrderItem = setOrderItemValues(orderItem, new MapSqlParameterSource(), key);
                 jdbcTemplate.update(UPDATE_ORDER_ITEM, paramSourceOrderItem);
             }
@@ -120,6 +118,8 @@ public class JdbcOrderDao implements OrderDao {
         order.setLastName(rs.getString("lastName"));
         order.setDeliveryAddress(rs.getString("deliveryAddress"));
         order.setContactPhoneNo(rs.getString("contactPhoneNo"));
+        order.setDescription(rs.getString("description"));
+        order.setTotalQuantity(rs.getLong("totalQuantity"));
         order.setTotalPrice(rs.getBigDecimal("totalPrice"));
         order.setUserId(rs.getLong("userId"));
         return order;
@@ -136,11 +136,13 @@ public class JdbcOrderDao implements OrderDao {
                                  .addValue("lastName", order.getLastName())
                                  .addValue("deliveryAddress", order.getDeliveryAddress())
                                  .addValue("contactPhoneNo", order.getContactPhoneNo())
+                                 .addValue("description", order.getDescription())
+                                 .addValue("totalQuantity", order.getTotalQuantity())
                                  .addValue("totalPrice", order.getTotalPrice())
                                  .addValue("userId", order.getUserId());
         return key == null ? paramSource : paramSource.addValue("key", key);
-
     }
+
     private static SqlParameterSource setOrderItemValues(OrderItem orderItem, MapSqlParameterSource paramSource, Long key){
         paramSource = paramSource.addValue("phone_id", orderItem.getPhone().getKey())
                                  .addValue("quantity", orderItem.getQuantity())

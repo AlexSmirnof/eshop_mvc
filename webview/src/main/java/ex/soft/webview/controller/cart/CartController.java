@@ -1,7 +1,6 @@
 package ex.soft.webview.controller.cart;
 
 import ex.soft.domain.model.Cart;
-import ex.soft.domain.model.OrderItem;
 import ex.soft.domain.model.Phone;
 import ex.soft.service.PhoneService;
 import ex.soft.service.api.ICartService;
@@ -12,11 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Alex108 on 19.10.2016.
@@ -37,8 +31,10 @@ public class CartController {
     public Cart showCartWidget(HttpSession session) {
         LOGGER.info("--------------------------------");
         LOGGER.info("SHOW_CART_WIDGET");
+        Cart cart = cartService.getCart(session);
+        LOGGER.info(cart.getOrderItems());
         LOGGER.info("--------------------------------");
-        return cartService.getCart(session);
+        return cart;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -47,82 +43,57 @@ public class CartController {
     }
 
     @RequestMapping(value = "/addProductToCart/{key:[\\d]+}", method = RequestMethod.POST)
-    public @ResponseBody String addProductToCart(@Valid @Size(min = 1) @ModelAttribute("quantity") Long quantity, BindingResult result,
+    public @ResponseBody String addProductToCart(@RequestParam String quantity,
                                                  @PathVariable("key") Long productId,
                                                  HttpSession session ){
-        LOGGER.info("ADD_TO_CART");
+        LOGGER.info("Add product to cart");
         LOGGER.info("key: " + productId);
         LOGGER.info("quantity: " + quantity);
-        if (result.hasErrors()){
-            LOGGER.error(result.toString());
-            return "Error: Invalid quantity number format";
-        } else if (quantity <= 0){
-            LOGGER.error("Quantity must be greater than 0");
-            return "Error: Quantity must be greater than 0";
-        } else {
-            Phone phone = phoneService.getProduct(productId);
-            OrderItem orderItem = new OrderItem();
-            orderItem.setPhone(phone);
-            orderItem.setQuantity(quantity);
-            cartService.addToCart(session, orderItem);
-            LOGGER.info(phone.getModel() + " in " + quantity + " items, added to cart");
-            return phone.getModel() + " in " + quantity + " items, added to cart";
+
+        Long qty = null;
+        try{
+            qty = Long.valueOf(quantity);
+        } catch (NumberFormatException e){
+            LOGGER.info("Error: Quantity must be a number");
+            return "Error: Quantity must be a number";
         }
+        if (qty <= 0) return "Error: Quantity must be a positive number";
+        Phone phone = phoneService.getProduct(productId);
+        cartService.addToCart(session, phone, qty);
+
+        LOGGER.info(phone.getModel() + " in " + quantity + " items, added to cart");
+        return phone.getModel() + " in " + quantity + " items, added to cart";
     }
 
     @RequestMapping(value = "delete/{key}", method = RequestMethod.POST)
-    public String deleteProductFromCart(@RequestParam Map<String, String> params,
-                                        @PathVariable Long key,
-                                        HttpSession session){
-        LOGGER.info("DELETE_FROM_CART");
-        LOGGER.info("params: "  + params);
-        LOGGER.info("key: " + key);
-        String value = params.get(key.toString());
-        LOGGER.info("value: " + value);
-        if (value == null) throw new RuntimeException("Can`t associate product with quantity");
-        Long quantity = null;
-        try{
-            quantity = Long.valueOf(value);
-            LOGGER.info("quantity: " + quantity);
-        } catch (NumberFormatException e){
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException("Incorrect quantity number format");
-        }
-        if (quantity <= 0) throw new RuntimeException("Quantity must be greater than 0");
-        Phone phone = phoneService.getProduct(key);
-        OrderItem orderItem = new OrderItem();
-        orderItem.setPhone(phone);
-        orderItem.setQuantity(quantity);
-        Long res = cartService.deleteFromCart(session, orderItem);
-        LOGGER.info(phone.getModel() + " in "+ res + " items, deleted from cart");
+    public String deleteProductFromCart(@PathVariable Long key, HttpSession session){
+        LOGGER.info("Delete product from cart with key=" + key);
+        Long result = cartService.deleteFromCart(session, key);
+        LOGGER.info("Product with key=" + key + " in " + result + " items, deleted from cart");
         return "cart/cart";
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String updateProductsInCart(@RequestParam Map<String, String> params,
-                                       HttpSession session ){
-        LOGGER.info("UPDATE_CART");
-        LOGGER.info("params: "  + params);
-        List<OrderItem> orderItems = new ArrayList<>();
-        try{
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                Long key = Long.valueOf(entry.getKey());
-                Long quantity = Long.valueOf(entry.getValue());
-                LOGGER.info("key=" + key + ", quantity=" + quantity);
-                if (quantity <= 0) throw new RuntimeException("Quantity must be greater than 0");
-                Phone phone = phoneService.getProduct(key);
-                OrderItem orderItem = new OrderItem();
-                orderItem.setPhone(phone);
-                orderItem.setQuantity(quantity);
-                orderItems.add(orderItem);
-            }
-        } catch (NumberFormatException e){
-            LOGGER.error(e.getMessage());
-            throw new RuntimeException("Incorrect quantity number format");
+    public String updateProductsInCart(Cart cart, BindingResult result, HttpSession session ){
+        LOGGER.info("Update products in cart");
+        LOGGER.info(cart.getOrderItems());
+        LOGGER.info(result.getTarget());
+        LOGGER.info(result.getObjectName());
+        LOGGER.info(result.getModel());
+        LOGGER.info(result.toString());
+        if(result.hasErrors()){
+            LOGGER.info("ERROR:" + result.toString());
+            return "cart/cart";
+        } else {
+            cartService.updateCart(session, cart);
+            LOGGER.info( cart.getTotalQuantity() + " items, updated in cart");
+            return "cart/cart";
         }
-        cartService.updateCart(session, orderItems);
-        LOGGER.info( orderItems.size() + " items, updated in cart");
-        return "cart/cart";
+    }
+
+    @RequestMapping(value = "/order", method = RequestMethod.GET)
+    public String forwardToOrderPage(){
+        return "order/order";
     }
 
     @RequestMapping(value = "/getCartJson", method = RequestMethod.GET)
