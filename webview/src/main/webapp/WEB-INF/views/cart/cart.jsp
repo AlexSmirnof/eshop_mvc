@@ -15,7 +15,7 @@
 <body>
 <div class="container">
     <div class="row">
-        <tag:header/>
+        <tag:header showCartWidget="true"/>
     </div>
     <div class="row">
         <h2>Cart</h2>
@@ -48,7 +48,7 @@
                     <td>${product.price}</td>
                     <td>
                         <form:input path="orderItems[${status.index}].quantity" class="quantityField" size="10" value="${orderItem.quantity}"/>
-                        <form:errors path="orderItems[${status.index}].quantity" class="error"/>
+                        <span class="error"><form:errors path="orderItems[${status.index}].quantity"/></span>
                     </td>
                     <td>
                         <button formaction="${cartPage}/delete/${product.key}" class="deleteFromCartBtn">Delete</button>

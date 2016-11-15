@@ -2,15 +2,19 @@ package ex.soft.webview.controller.cart;
 
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Phone;
-import ex.soft.service.PhoneService;
-import ex.soft.service.api.ICartService;
+import ex.soft.service.api.CartService;
+import ex.soft.service.api.ProductService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 /**
  * Created by Alex108 on 19.10.2016.
@@ -22,10 +26,17 @@ public class CartController {
     private static final Logger LOGGER = Logger.getLogger(CartController.class);
 
     @Autowired
-    private PhoneService phoneService;
-
+    private ProductService<Phone> phoneService;
     @Autowired
-    private ICartService cartService;
+    private CartService cartService;
+    @Autowired
+    @Qualifier("cartValidator")
+    private Validator cartValidator;
+
+    @InitBinder
+    private void initBinder(WebDataBinder binder){
+        binder.setValidator(cartValidator);
+    }
 
     @ModelAttribute("cart")
     public Cart showCartWidget(HttpSession session) {
@@ -74,7 +85,7 @@ public class CartController {
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String updateProductsInCart(Cart cart, BindingResult result, HttpSession session ){
+    public String updateProductsInCart(@ModelAttribute("cart") @Valid Cart cart, BindingResult result, HttpSession session ){
         LOGGER.info("Update products in cart");
         LOGGER.info(cart.getOrderItems());
         LOGGER.info(result.getTarget());
@@ -82,7 +93,7 @@ public class CartController {
         LOGGER.info(result.getModel());
         LOGGER.info(result.toString());
         if(result.hasErrors()){
-            LOGGER.info("ERROR:" + result.toString());
+            LOGGER.error("ERROR:" + result.toString());
             return "cart/cart";
         } else {
             cartService.updateCart(session, cart);
@@ -93,7 +104,7 @@ public class CartController {
 
     @RequestMapping(value = "/order", method = RequestMethod.GET)
     public String forwardToOrderPage(){
-        return "order/order";
+        return "redirect:/order";
     }
 
     @RequestMapping(value = "/getCartJson", method = RequestMethod.GET)

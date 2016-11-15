@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Created by Alex108 on 14.11.2016.
  */
-public interface ICartService {
+public interface CartService {
 
     Cart getCart(HttpSession session);
 

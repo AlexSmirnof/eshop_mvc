@@ -2,7 +2,7 @@ package ex.soft.service;
 
 import ex.soft.domain.dao.PhoneDao;
 import ex.soft.domain.model.Phone;
-import ex.soft.service.api.IProductService;
+import ex.soft.service.api.ProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * Created by Alex108 on 19.10.2016.
  */
 @Service
-public class PhoneService implements IProductService<Phone> {
+public class ProductServiceImpl implements ProductService<Phone> {
 
     private PhoneDao phoneDao;
 

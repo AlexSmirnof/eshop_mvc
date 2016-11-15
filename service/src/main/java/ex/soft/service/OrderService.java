@@ -4,7 +4,6 @@ import ex.soft.domain.dao.OrderDao;
 import ex.soft.domain.dao.UserDao;
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Order;
-import ex.soft.domain.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +26,7 @@ public class OrderService {
     public OrderService() {}
 
     @Transactional
-    public Order getOrder(HttpSession session)  {
+    public Order createOrder(HttpSession session)  {
         Cart cart = getCartSafely(session);
         Order order = new Order();
         order.setTotalQuantity(cart.getTotalQuantity());
@@ -37,17 +36,13 @@ public class OrderService {
     }
 
     @Transactional
-    public void placeOrder(Cart cart, Long userId){
-        User user = userDao.get(userId);
-        Order order = new Order();
-        order.setFirstName(user.getFirstName());
-        order.setLastName(user.getLastName());
-        order.setDeliveryAddress(user.getDeliveryAddress());
-        order.setContactPhoneNo(user.getContactPhoneNo());
-        order.setOrderItems(cart.getOrderItems());
-        order.setTotalPrice(cart.getTotalPrice());
-        order.setUserId(userId);
-        orderDao.save(order);
+    public Order getOrder(Long key){
+        return orderDao.get(key);
+    }
+
+    @Transactional
+    public Long placeOrder(Order order){
+        return orderDao.save(order);
     }
 
 

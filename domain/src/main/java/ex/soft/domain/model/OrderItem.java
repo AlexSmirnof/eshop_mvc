@@ -1,11 +1,17 @@
 package ex.soft.domain.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by Alex108 on 11.10.2016.
  */
 public class OrderItem {
 
     private Phone phone;
+
+    @NotNull(message = "non null")
+    @Min(value = 1, message = "ohoho")
     private Long quantity;
 
     public OrderItem() {

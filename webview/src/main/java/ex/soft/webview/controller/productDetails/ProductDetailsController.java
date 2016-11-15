@@ -2,8 +2,8 @@ package ex.soft.webview.controller.productDetails;
 
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Phone;
-import ex.soft.service.PhoneService;
-import ex.soft.service.api.ICartService;
+import ex.soft.service.ProductServiceImpl;
+import ex.soft.service.api.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,10 +22,10 @@ import javax.servlet.http.HttpSession;
 public class ProductDetailsController {
 
     @Autowired
-    private PhoneService phoneService;
+    private ProductServiceImpl phoneService;
 
     @Autowired
-    private ICartService cartService;
+    private CartService cartService;
 
     @ModelAttribute("cart")
     public Cart showCartWidget(HttpSession session) {

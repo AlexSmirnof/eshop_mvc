@@ -8,5 +8,12 @@
 
     <context:component-scan base-package="ex.soft.webview"/>
 
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages.errors</value>
+            </list>
+        </property>
+    </bean>
 
 </beans>

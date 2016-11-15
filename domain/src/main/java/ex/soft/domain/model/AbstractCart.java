@@ -1,5 +1,6 @@
 package ex.soft.domain.model;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public abstract class AbstractCart{
 
     private Long totalQuantity;
     private BigDecimal totalPrice;
+    @Valid
     private List<OrderItem> orderItems;
 
     public AbstractCart() {

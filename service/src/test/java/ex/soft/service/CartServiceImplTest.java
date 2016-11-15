@@ -2,7 +2,7 @@ package ex.soft.service;
 
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Phone;
-import ex.soft.service.api.ICartService;
+import ex.soft.service.api.CartService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,9 +21,9 @@ import static org.mockito.Mockito.when;
  * Created by Alex108 on 04.11.2016.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class CartServiceTest {
+public class CartServiceImplTest {
 
-    private ICartService cartService;
+    private CartService cartService;
 
     public Phone phone = new Phone();
 
@@ -32,7 +32,7 @@ public class CartServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        cartService = new CartService();
+        cartService = new ex.soft.service.CartServiceImpl();
         when(session.getAttribute(anyString())).thenReturn(new Cart());
         doNothing().when(session).setAttribute(anyString(), any(Cart.class));
     }

@@ -3,7 +3,6 @@ package ex.soft.service;
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.OrderItem;
 import ex.soft.domain.model.Phone;
-import ex.soft.service.api.ICartService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,7 +14,7 @@ import java.util.List;
  * Created by Alex108 on 19.10.2016.
  */
 @Service
-public class CartService implements ICartService{
+public class CartServiceImpl implements ex.soft.service.api.CartService {
 
     private static final String CART_ATTRIBUTE_NAME = "cart";
 

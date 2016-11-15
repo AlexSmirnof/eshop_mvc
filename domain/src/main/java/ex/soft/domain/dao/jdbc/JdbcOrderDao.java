@@ -70,14 +70,15 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void save(Order order) {
+    public Long save(Order order) {
         Long key = order.getKey();
         if ( key == null){
             SqlParameterSource paramSource = setOrderValues(order, new MapSqlParameterSource(), null);
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(INSERT, paramSource, keyHolder);
+            key = (Long) keyHolder.getKey();
             for (OrderItem orderItem: order.getOrderItems()){
-                SqlParameterSource paramSourceOrderItem = setOrderItemValues(orderItem, new MapSqlParameterSource(), (Long) keyHolder.getKey());
+                SqlParameterSource paramSourceOrderItem = setOrderItemValues(orderItem, new MapSqlParameterSource(), key);
                 jdbcTemplate.update(INSERT_ORDER_ITEM, paramSourceOrderItem);
             }
         } else {
@@ -88,6 +89,7 @@ public class JdbcOrderDao implements OrderDao {
                 jdbcTemplate.update(UPDATE_ORDER_ITEM, paramSourceOrderItem);
             }
         }
+        return key;
     }
 
     @Override

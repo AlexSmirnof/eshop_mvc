@@ -11,7 +11,7 @@
 <body>
 <div class="container">
     <div class="row">
-        <tag:header/>
+        <tag:header showCartWidget="true"/>
     </div>
     <div class="row">
         <h2> Phones</h2>

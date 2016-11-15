@@ -70,50 +70,45 @@
         </table>
     </div>
 
-    <%--confirm: ${param.confirm}<br/>--%>
-    <%--class:   ${order.getClass()}<br/>--%>
-    <%--bean:    ${order}<br/>--%>
-    <%--beanC:   ${orderC}<br/>--%>
-
     <div class="row">
-        <form action="${orderPage}/confirm" method="POST">
+        <form:form action="${orderPage}/confirm" method="POST" modelAttribute="order">
         <table class="order">
             <tr>
                 <td>First name</td>
                 <td>
-                    <input type="text" name="firstName" placeholder="First name" required>
+                    <form:input path="firstName"  placeholder="First name" />
                 </td>
             </tr>
             <tr>
                 <td>Last Name</td>
                 <td>
-                    <input type="text" name="lastName" placeholder="Last name" required>
+                    <form:input path="lastName"  placeholder="Last name" />
                 </td>
             </tr>
             <tr>
                 <td>Address</td>
                 <td>
-                    <input type="text" name="deliveryAddress" placeholder="Address" required>
+                    <form:input path="deliveryAddress"  placeholder="Address" />
                 </td>
             </tr>
             <tr>
                 <td>Phone</td>
                 <td>
-                    <input type="text" name="contactPhoneNo" placeholder="Phone" required>
+                    <form:input path="contactPhoneNo"  placeholder="Phone" />
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
-                     <textarea name="description" placeholder="Additional information"></textarea>
+                    <form:textarea path="description"  placeholder="Additional information" ></form:textarea>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <button>Order</button>
+                    <form:button>Order</form:button>
                 </td>
             </tr>
         </table>
-        </form>
+        </form:form>
     </div>
 </div>
 </body>

@@ -1,14 +1,29 @@
 package ex.soft.domain.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Created by Alex108 on 11.10.2016.
  */
 public class Order extends AbstractCart{
 
     private Long key;
+
+    @NotNull(message = "Fist Name can not be empty")
+    @Size(min = 2)
     private String firstName;
+
+    @NotNull(message = "Last Name can not be empty")
+    @Size(min = 2)
     private String lastName;
+
+    @NotNull(message = "Address can not be empty")
+    @Size(min = 5)
     private String deliveryAddress;
+
+    @NotNull(message = "PhoneNo can not be empty")
+    @Size(min = 7)
     private String contactPhoneNo;
     private String description;
     private Long userId;
