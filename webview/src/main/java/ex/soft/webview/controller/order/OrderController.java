@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -35,9 +36,13 @@ public class OrderController {
     }
 
     @RequestMapping(value = "confirm", method = RequestMethod.POST)
-    public String placeOrder(@Valid Order order, BindingResult result, HttpSession session){
+    public String placeOrder(@Valid @ModelAttribute Order order, BindingResult result, HttpSession session){
         LOGGER.info("Place Order");
         LOGGER.info(order);
+        if(result.hasErrors()){
+            LOGGER.error(result.getFieldErrors());
+            return "order/order";
+        }
         Long key = orderService.placeOrder(session, order);
         return "redirect:/orderConfirmation/" + key;
     }

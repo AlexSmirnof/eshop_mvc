@@ -35,7 +35,7 @@ public class ProductDetailsController {
     @RequestMapping(method = RequestMethod.GET)
     public String showProductDetails( @RequestParam("model") String model,
                                       @RequestParam("key")   Long productId,
-                                      Model modelView){
+                                                             Model modelView ){
         Phone product = phoneService.getProduct(productId);
         modelView.addAttribute("product", product);
         return "productDetails/productDetails";

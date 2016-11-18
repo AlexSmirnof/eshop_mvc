@@ -40,12 +40,7 @@ public class CartController {
 
     @ModelAttribute("cart")
     public Cart showCartWidget(HttpSession session) {
-        LOGGER.info("--------------------------------");
-        LOGGER.info("SHOW_CART_WIDGET");
-        Cart cart = cartService.getCart(session);
-        LOGGER.info(cart.getOrderItems());
-        LOGGER.info("--------------------------------");
-        return cart;
+        return cartService.getCart(session);
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -58,9 +53,6 @@ public class CartController {
                                                  @PathVariable("key") Long productId,
                                                  HttpSession session ){
         LOGGER.info("Add product to cart");
-        LOGGER.info("key: " + productId);
-        LOGGER.info("quantity: " + quantity);
-
         Long qty = null;
         try{
             qty = Long.valueOf(quantity);
@@ -87,11 +79,6 @@ public class CartController {
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public String updateProductsInCart(@ModelAttribute("cart") @Valid Cart cart, BindingResult result, HttpSession session ){
         LOGGER.info("Update products in cart");
-        LOGGER.info(cart.getOrderItems());
-        LOGGER.info(result.getTarget());
-        LOGGER.info(result.getObjectName());
-        LOGGER.info(result.getModel());
-        LOGGER.info(result.toString());
         if(result.hasErrors()){
             LOGGER.error("ERROR:" + result.toString());
             return "cart/cart";
@@ -109,11 +96,10 @@ public class CartController {
 
     @RequestMapping(value = "/getCartJson", method = RequestMethod.GET)
     public @ResponseBody String getCartJson(HttpSession session){
-        LOGGER.info("GET_JSON");
+        LOGGER.info("Get json");
         Cart cart =  cartService.getCart(session);
         String data = String.format("{\"quantity\":%d, \"price\":%s}", cart.getTotalQuantity(), cart.getTotalPrice());
-        LOGGER.info("DATA: " + data);
-        LOGGER.info("SUCCESS");
+        LOGGER.info("Data: " + data);
         return data;
     }
 
