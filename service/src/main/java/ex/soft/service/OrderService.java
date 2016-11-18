@@ -41,7 +41,11 @@ public class OrderService {
     }
 
     @Transactional
-    public Long placeOrder(Order order){
+    public Long placeOrder(HttpSession session, Order order){
+        Long userId = 1L;//(Long) session.getAttribute("user_id");
+        order.setUserId(userId);
+        Cart cart = getCartSafely(session);
+        order.setOrderItems(cart.getOrderItems());
         return orderDao.save(order);
     }
 

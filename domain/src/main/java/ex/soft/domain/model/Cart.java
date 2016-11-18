@@ -10,4 +10,8 @@ public class Cart extends AbstractCart {
 
     public Cart() {}
 
+    @Override
+    public String toString() {
+        return "Cart{" + super.toString() + "}";
+    }
 }

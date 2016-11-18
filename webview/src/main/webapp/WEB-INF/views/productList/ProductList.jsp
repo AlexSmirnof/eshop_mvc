@@ -4,9 +4,9 @@
 <html>
 <head>
     <title>ProductList</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <tag:style/>
     <tag:script/>
+    <tag:bootstrap/>
 </head>
 <body>
 <div class="container">
@@ -33,7 +33,7 @@
                     <td><input type="text"  class="quantityField" key="${product.key}" size="10" value="1"/>
                         <span class="error"></span>
                     </td>
-                    <td><button class="addToCartBtn" key="${product.key}">Add to cart</button></td>
+                    <td><button class="addToCartBtn btn btn-success" key="${product.key}">Add to cart</button></td>
                 </tr>
             </c:forEach>
         </table>

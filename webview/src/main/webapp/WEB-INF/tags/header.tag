@@ -5,10 +5,11 @@
 <header>
     <div class="phone"><span class="glyphicon glyphicon-phone"></span> Phonify</div> <%--Gallivant--%>
         <c:if test="${showCartWidget}">
-            <button id="cartWidget"><u>My cart:</u>
+            <button id="cartWidget" class="btn btn-info"><u>My cart:</u>
             <span id="cartItems">${empty cart.totalQuantity ? 0 : cart.totalQuantity}</span>
             items <span id="cartPrice">${empty cart.totalPrice ? 0 : cart.totalPrice}</span>$
+            </button>
         </c:if>
-    </button>
+
     <div class="clear"></div>
 </header>

@@ -47,10 +47,8 @@ public abstract class AbstractCart{
 
     @Override
     public String toString() {
-        return "Cart{" +
-                "totalQuantity=" + totalQuantity +
+        return  "totalQuantity=" + totalQuantity +
                 ", totalPrice=" + totalPrice +
-                ", orderItems=" + orderItems +
-                '}';
+                ", orderItems=" + orderItems;
     }
 }

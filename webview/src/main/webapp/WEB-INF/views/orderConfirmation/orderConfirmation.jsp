@@ -1,13 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <c:set var="productList" value="${pageContext.request.contextPath}/productList" scope="page"/>
-<c:set var="cartPage" value="${pageContext.request.contextPath}/cart" scope="page"/>
-<c:set var="orderPage" value="${pageContext.request.contextPath}/order" scope="page"/>
+<c:set var="cartPage"    value="${pageContext.request.contextPath}/cart"        scope="page"/>
+<c:set var="orderPage"   value="${pageContext.request.contextPath}/order"       scope="page"/>
 
 <html>
 <head>
@@ -22,13 +21,7 @@
         <tag:header/>
     </div>
     <div class="row">
-        <h2>Thank you for your submission</h2>
-        <h2>Order</h2>
-    </div>
-    <div class="row">
-        <nav class="cart">
-            <a href="${cartPage}"><button class="back">Back to Cart</button></a>
-        </nav>
+        <h2>Thank you for your order</h2>
     </div>
     <div class="row">
         <table class="product cart">
@@ -52,7 +45,7 @@
             <tr>
                 <td colspan="3" class="hideme"></td>
                 <td>Subtotal</td>
-                <td>${order.totalPrice}$</td>
+                <td>${order.totalPrice - 5}$</td>
             </tr>
             <tr>
                 <td colspan="3" class="hideme"></td>
@@ -63,101 +56,41 @@
                 <td colspan="3" class="hideme"></td>
                 <td>TOTAL</td>
                 <td>
-                    <%--<fmt:formatNumber var="total" pattern="000.00" value="${orderC.totalPrice + 5}"/>--%>
-                    <%--<c:out value="${total}"/>--%>
-                    ${order.totalPrice + 5}$
+                    ${order.totalPrice}$
                 </td>
             </tr>
         </table>
     </div>
 
-    <%--confirm: ${param.confirm}<br/>--%>
-    <%--class: ${order.getClass()}<br/>--%>
-    <%--bean:    ${order}<br/>--%>
-    <%--beanC:    ${orderC}<br/>--%>
-
     <div class="row">
-        <form action="${orderPage}" method="POST">
             <table class="order">
                 <tr>
                     <td>First name</td>
                     <td>
-                        <c:choose>
-                            <c:when test="${param.confirm}">
-                                <jsp:getProperty name="order" property="firstName"/>
-                            </c:when>
-                            <c:otherwise>
-                                <input type="text" name="firstName" placeholder="First name" required>
-                            </c:otherwise>
-                        </c:choose>
+                        ${order.firstName}
                     </td>
                 </tr>
                 <tr>
                     <td>Last Name</td>
                     <td>
-                        <c:choose>
-                            <c:when test="${param.confirm}">
-                                <jsp:getProperty name="order" property="lastName"/>
-                            </c:when>
-                            <c:otherwise>
-                                <input type="text" name="lastName" placeholder="Last name" required>
-                            </c:otherwise>
-                        </c:choose>
+                        ${order.lastName}
                     </td>
                 </tr>
                 <tr>
                     <td>Address</td>
                     <td>
-                        <c:choose>
-                            <c:when test="${param.confirm}">
-                                <jsp:getProperty name="order" property="deliveryAddress"/>
-                            </c:when>
-                            <c:otherwise>
-                                <input type="text" name="deliveryAddress" placeholder="Address" required>
-                            </c:otherwise>
-                        </c:choose>
+                        ${order.deliveryAddress}
                     </td>
                 </tr>
                 <tr>
                     <td>Phone</td>
                     <td>
-                        <c:choose>
-                            <c:when test="${param.confirm}">
-                                <jsp:getProperty name="order" property="contactPhoneNo"/>
-                            </c:when>
-                            <c:otherwise>
-                                <input type="text" name="contactPhoneNo" placeholder="Phone" required>
-                            </c:otherwise>
-                        </c:choose>
+                        ${order.contactPhoneNo}
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <c:choose>
-                            <c:when test="${param.confirm}">
-                                <%--<jsp:getProperty name="orderC" property="description"/>--%>
-                                desc: ${param.description}<br>
-                                quan:  <jsp:getProperty name="order" property="totalQuantity"/><br/>
-                                price:  <jsp:getProperty name="order" property="totalPrice"/><br/>
-                                items:  <jsp:getProperty name="order" property="orderItems"/>
-                            </c:when>
-                            <c:otherwise>
-                                <textarea name="description" placeholder="Additional information"></textarea>
-                            </c:otherwise>
-                        </c:choose>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <c:choose>
-                            <c:when test="${param.confirm}">
-                                <button formaction="${productList}" formmethod="GET">Back To Shopping</button>
-                            </c:when>
-                            <c:otherwise>
-                                <input type="hidden" name="confirm" value="true"/>
-                                <button>Order</button>
-                            </c:otherwise>
-                        </c:choose>
+                        ${order.description}
                     </td>
                 </tr>
             </table>

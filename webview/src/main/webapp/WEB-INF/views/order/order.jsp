@@ -6,13 +6,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <c:set var="productList" value="${pageContext.request.contextPath}/productList" scope="page"/>
-<c:set var="cartPage" value="${pageContext.request.contextPath}/cart" scope="page"/>
-<c:set var="orderPage" value="${pageContext.request.contextPath}/order" scope="page"/>
+<c:set var="orderPage"   value="${pageContext.request.contextPath}/order"       scope="page"/>
+<c:set var="cartPage"    value="${pageContext.request.contextPath}/cart"        scope="page"/>
+
+<c:set var="orderItemsList" value="${order.orderItems}"  scope="page"/>
+<c:set var="totalPrice"     value="${order.totalPrice}"  scope="page"/>
 
 <html>
 <head>
     <title>Order</title>
     <tag:style/>
+    <tag:bootstrap/>
     <tag:script/>
 
 </head>
@@ -26,7 +30,7 @@
     </div>
     <div class="row">
         <nav class="cart">
-            <a href="${cartPage}"><button class="back">Back to Cart</button></a>
+            <a href="${cartPage}" class="btn btn-primary btn-lg">Back to Cart</a>
         </nav>
     </div>
     <div class="row">
@@ -38,7 +42,7 @@
                 <th>Quantity</th>
                 <th>Price</th>
             </tr>
-            <c:forEach var="orderItem" items="${order.orderItems}">
+            <c:forEach var="orderItem" items="${orderItemsList}">
                 <c:set var="phone" value="${orderItem.phone}" scope="page"/>
                 <tr>
                     <td>${phone.model}</td>
@@ -51,7 +55,7 @@
             <tr>
                 <td colspan="3" class="hideme"></td>
                 <td>Subtotal</td>
-                <td>${order.totalPrice}$</td>
+                <td>${totalPrice}$</td>
             </tr>
             <tr>
                 <td colspan="3" class="hideme"></td>
@@ -64,7 +68,7 @@
                 <td>
                     <%--<fmt:formatNumber var="total" pattern="000.00" value="${orderC.totalPrice + 5}"/>--%>
                     <%--<c:out value="${total}"/>--%>
-                    ${order.totalPrice + 5}$
+                    ${totalPrice + 5}$
                 </td>
             </tr>
         </table>
@@ -77,24 +81,28 @@
                 <td>First name</td>
                 <td>
                     <form:input path="firstName"  placeholder="First name" />
+                    <br/><span class="error"><form:errors path="firstName"/></span>
                 </td>
             </tr>
             <tr>
                 <td>Last Name</td>
                 <td>
                     <form:input path="lastName"  placeholder="Last name" />
+                    <br/><span class="error"><form:errors path="lastName"/></span>
                 </td>
             </tr>
             <tr>
                 <td>Address</td>
                 <td>
                     <form:input path="deliveryAddress"  placeholder="Address" />
+                    <br/><span class="error"><form:errors path="deliveryAddress"/></span>
                 </td>
             </tr>
             <tr>
                 <td>Phone</td>
                 <td>
                     <form:input path="contactPhoneNo"  placeholder="Phone" />
+                    <br/><span class="error"><form:errors path="contactPhoneNo"/></span>
                 </td>
             </tr>
             <tr>
@@ -104,7 +112,11 @@
             </tr>
             <tr>
                 <td>
-                    <form:button>Order</form:button>
+                    <form:hidden path="orderItems"    value="${orderItemsList}"/>
+                    <form:hidden path="totalQuantity" value="${order.totalQuantity}"/>
+                    <form:hidden path="totalPrice"    value="${totalPrice + 5}"/>
+
+                    <form:button class="btn btn-success">Order</form:button>
                 </td>
             </tr>
         </table>

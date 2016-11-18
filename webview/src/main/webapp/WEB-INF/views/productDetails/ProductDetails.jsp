@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <nav>
-            <a href="productList"><button>Back to product list</button></a>
+            <a href="productList" class="btn btn-primary btn-large">Back to product list</a>
         </nav>
     </div>
     <div class="row">
@@ -53,7 +53,7 @@
                    <span class="error"></span>
                </td>
                <td>
-                   <button class="addToCartBtn" key="${product.key}">Add to cart</button>
+                   <button class="addToCartBtn btn btn-success" key="${product.key}">Add to cart</button>
                </td>
            </tr>
 

@@ -10,8 +10,8 @@ public class OrderItem {
 
     private Phone phone;
 
-    @NotNull(message = "non null")
-    @Min(value = 1, message = "ohoho")
+    @NotNull(message = "Quantity can not be empty")
+    @Min(value = 1, message = "Quantity must be positive number")
     private Long quantity;
 
     public OrderItem() {

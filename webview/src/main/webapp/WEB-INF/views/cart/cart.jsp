@@ -10,6 +10,7 @@
 <head>
     <title>Cart</title>
     <tag:style/>
+    <tag:bootstrap/>
     <tag:script/>
 </head>
 <body>
@@ -22,8 +23,8 @@
     </div>
     <div class="row">
         <nav class="cart">
-            <a href="${productList}"><button class="back">Back to product list</button></a>
-            <a href="${orderPage}"><button class="forward">Order</button></a>
+            <a href="${productList}" class="btn btn-primary btn-lg">Back to product list</a>
+            <a href="${orderPage}"   class="btn btn-primary btn-lg">Order</a>
         </nav>
     </div>
     <div class="row">
@@ -42,7 +43,7 @@
             <c:forEach items="${cart.orderItems}" var="orderItem" varStatus="status" begin="0" step="1">
                 <c:set value="${orderItem.phone}" var="product" scope="page"/>
                 <tr>
-                    <td><a href="/productDetails/${product.model}/${product.key}" target="_blank">${product.model}</a></td>
+                    <td><a href="productDetails?model=${product.model}&key=${product.key}" target="_blank">${product.model}</a></td>
                     <td>${product.color}</td>
                     <td>${product.displaySize}</td>
                     <td>${product.price}</td>
@@ -51,21 +52,21 @@
                         <span class="error"><form:errors path="orderItems[${status.index}].quantity"/></span>
                     </td>
                     <td>
-                        <button formaction="${cartPage}/delete/${product.key}" class="deleteFromCartBtn">Delete</button>
+                        <button formaction="${cartPage}/delete/${product.key}" class="btn btn-danger">Delete</button>
                     </td>
                 </tr>
             </c:forEach>
         </table>
 
         <div class="cartBtns cartForms">
-             <form:button>Update</form:button>
+             <form:button class="btn btn-success">Update</form:button>
         </div>
 
        </form:form>
 
         <div class="cartBtns cartForms">
             <form action="${cartPage}/order">
-                <button>Order</button>
+                <button class="btn btn-success">Order</button>
             </form>
         </div>
 

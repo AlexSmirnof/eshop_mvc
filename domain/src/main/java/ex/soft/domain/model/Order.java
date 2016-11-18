@@ -1,6 +1,7 @@
 package ex.soft.domain.model;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -23,8 +24,10 @@ public class Order extends AbstractCart{
     private String deliveryAddress;
 
     @NotNull(message = "PhoneNo can not be empty")
-    @Size(min = 7)
+    @Pattern(regexp="\\(\\d{3}\\)\\d{3}-\\d{4}")
     private String contactPhoneNo;
+
+    @Size(min=2, max=250)
     private String description;
     private Long userId;
 

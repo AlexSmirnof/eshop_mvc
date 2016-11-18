@@ -23,16 +23,16 @@ import java.util.List;
 @Repository("orderDao")
 public class JdbcOrderDao implements OrderDao {
 
-    public static final String FIND_ALL = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, userId FROM Orders";
-    public static final String GET =      "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, userId FROM Orders WHERE id = :key";
-    public static final String INSERT =   "INSERT INTO Orders (firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, userId) " +
-                                                     "VALUES (:firstName, :lastName, :deliveryAddress, :contactPhoneNo, :description, :totalQuantity, :totalPrice, :userId)";
-    public static final String UPDATE =   "UPDATE Orders SET firstName = :firstName, lastName = :lastName, deliveryAddress = :deliveryAddress, " +
-                                                            "contactPhoneNo = :contactPhoneNo, description = :description, totalQuantity = :totalQuantity, totalPrice = :totalPrice, userId = :userId WHERE id = :key";
+    public static final String FIND_ALL = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, user_id FROM Orders";
+    public static final String GET      = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, user_id FROM Orders WHERE id = :key";
+    public static final String INSERT   = "INSERT INTO Orders (firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, user_id) " +
+                                                     "VALUES (:firstName, :lastName, :deliveryAddress, :contactPhoneNo, :description, :totalQuantity, :totalPrice, :user_id)";
+    public static final String UPDATE   = "UPDATE Orders SET firstName = :firstName, lastName = :lastName, deliveryAddress = :deliveryAddress, " +
+                                                            "contactPhoneNo = :contactPhoneNo, description = :description, totalQuantity = :totalQuantity, totalPrice = :totalPrice, user_id = :user_id WHERE id = :key";
     public static final String FIND_ALL_ORDER_ITEMS_BY_KEY = "SELECT phone_id, quantity FROM OrderItems WHERE order_id = :order_id";
-    public static final String GET_ORDER_ITEM_BY_KEY =       "SELECT phone_id, quantity FROM OrderItems WHERE order_id = :key";
-    public static final String INSERT_ORDER_ITEM =           "INSERT INTO OrderItems (phone_id, quantity, order_id) VALUES (:phone_id, :quantity, :order_id)";
-    public static final String UPDATE_ORDER_ITEM =           "UPDATE OrderItems SET phone_id = :phone_id, quantity = :quantity WHERE order_id = :order_id";
+    public static final String GET_ORDER_ITEM_BY_KEY       = "SELECT phone_id, quantity FROM OrderItems WHERE order_id = :key";
+    public static final String INSERT_ORDER_ITEM           = "INSERT INTO OrderItems (phone_id, quantity, order_id) VALUES (:phone_id, :quantity, :order_id)";
+    public static final String UPDATE_ORDER_ITEM           = "UPDATE OrderItems SET phone_id = :phone_id, quantity = :quantity WHERE order_id = :order_id";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
     private PhoneDao phoneDao;
@@ -123,7 +123,7 @@ public class JdbcOrderDao implements OrderDao {
         order.setDescription(rs.getString("description"));
         order.setTotalQuantity(rs.getLong("totalQuantity"));
         order.setTotalPrice(rs.getBigDecimal("totalPrice"));
-        order.setUserId(rs.getLong("userId"));
+        order.setUserId(rs.getLong("user_id"));
         return order;
     }
     private static OrderItem setOrderItemProperties(OrderItem orderItem, ResultSet rs, PhoneDao phoneDao) throws SQLException {
@@ -141,7 +141,7 @@ public class JdbcOrderDao implements OrderDao {
                                  .addValue("description", order.getDescription())
                                  .addValue("totalQuantity", order.getTotalQuantity())
                                  .addValue("totalPrice", order.getTotalPrice())
-                                 .addValue("userId", order.getUserId());
+                                 .addValue("user_id", order.getUserId());
         return key == null ? paramSource : paramSource.addValue("key", key);
     }
 
