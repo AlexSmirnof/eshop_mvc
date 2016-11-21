@@ -10,6 +10,7 @@ import org.springframework.validation.Validator;
  */
 @Component("orderItemValidator")
 public class OrderItemValidator implements Validator {
+
     @Override
     public boolean supports(Class<?> clazz) {
         return clazz.equals(OrderItem.class);

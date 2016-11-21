@@ -2,8 +2,10 @@ package ex.soft.domain.dao.jdbc;
 
 import ex.soft.domain.dao.OrderDao;
 import ex.soft.domain.dao.PhoneDao;
+import ex.soft.domain.dao.UserDao;
 import ex.soft.domain.model.Order;
 import ex.soft.domain.model.OrderItem;
+import ex.soft.domain.model.User;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -36,19 +38,9 @@ public class JdbcOrderDao implements OrderDao {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
     private PhoneDao phoneDao;
+    private UserDao userDao;
 
     public JdbcOrderDao() {}
-
-    @Resource(name = "dataSource")
-    public void setDataSource(DataSource dataSource) {
-        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-
-    }
-
-    @Resource(name = "phoneDao")
-    public void setPhoneDao(PhoneDao phoneDao) {
-        this.phoneDao = phoneDao;
-    }
 
     @Override
     public Order get(Long key) {
@@ -110,11 +102,9 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     @Override
-    public void close() {
+    public void close() {}
 
-    }
-
-    private static Order setOrderProperties(Order order, ResultSet rs) throws SQLException {
+    private Order setOrderProperties(Order order, ResultSet rs) throws SQLException {
         order.setKey(rs.getLong("id"));
         order.setFirstName(rs.getString("firstName"));
         order.setLastName(rs.getString("lastName"));
@@ -123,17 +113,19 @@ public class JdbcOrderDao implements OrderDao {
         order.setDescription(rs.getString("description"));
         order.setTotalQuantity(rs.getLong("totalQuantity"));
         order.setTotalPrice(rs.getBigDecimal("totalPrice"));
-        order.setUserId(rs.getLong("user_id"));
+        Long userId = rs.getLong("user_id");
+        User user = userDao.get(userId);
+        order.setUser(user);
         return order;
     }
-    private static OrderItem setOrderItemProperties(OrderItem orderItem, ResultSet rs, PhoneDao phoneDao) throws SQLException {
+    private OrderItem setOrderItemProperties(OrderItem orderItem, ResultSet rs, PhoneDao phoneDao) throws SQLException {
         Long phone_id = rs.getLong("phone_id");
         orderItem.setPhone(phoneDao.get(phone_id));
         orderItem.setQuantity(rs.getLong("quantity"));
         return orderItem;
     }
 
-    private static SqlParameterSource setOrderValues(Order order, MapSqlParameterSource paramSource, Long key){
+    private SqlParameterSource setOrderValues(Order order, MapSqlParameterSource paramSource, Long key){
         paramSource = paramSource.addValue("firstName", order.getFirstName())
                                  .addValue("lastName", order.getLastName())
                                  .addValue("deliveryAddress", order.getDeliveryAddress())
@@ -141,15 +133,30 @@ public class JdbcOrderDao implements OrderDao {
                                  .addValue("description", order.getDescription())
                                  .addValue("totalQuantity", order.getTotalQuantity())
                                  .addValue("totalPrice", order.getTotalPrice())
-                                 .addValue("user_id", order.getUserId());
+                                 .addValue("user_id", order.getUser().getKey());
         return key == null ? paramSource : paramSource.addValue("key", key);
     }
 
-    private static SqlParameterSource setOrderItemValues(OrderItem orderItem, MapSqlParameterSource paramSource, Long key){
+    private SqlParameterSource setOrderItemValues(OrderItem orderItem, MapSqlParameterSource paramSource, Long key){
         paramSource = paramSource.addValue("phone_id", orderItem.getPhone().getKey())
                                  .addValue("quantity", orderItem.getQuantity())
                                  .addValue("order_id", key);
         return paramSource;
     }
 
+    @Resource(name = "dataSource")
+    public void setDataSource(DataSource dataSource) {
+        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+
+    }
+
+    @Resource(name = "phoneDao")
+    public void setPhoneDao(PhoneDao phoneDao) {
+        this.phoneDao = phoneDao;
+    }
+
+    @Resource(name = "userDao")
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
 }

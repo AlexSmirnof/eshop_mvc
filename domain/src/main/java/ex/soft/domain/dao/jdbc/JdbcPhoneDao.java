@@ -59,12 +59,7 @@ public class JdbcPhoneDao implements PhoneDao {
     @Override
     public void close() {}
 
-    @Resource(name = "dataSource")
-    public void setDataSource(DataSource dataSource) {
-        jdbcTemplate = new JdbcTemplate(dataSource);
-    }
-
-    private static Phone setPhoneProperties(Phone phone, ResultSet rs) throws SQLException {
+    private Phone setPhoneProperties(Phone phone, ResultSet rs) throws SQLException {
         phone.setKey(rs.getLong("id"));
         phone.setModel(rs.getString("model"));
         phone.setColor(rs.getString("color"));
@@ -76,7 +71,7 @@ public class JdbcPhoneDao implements PhoneDao {
         return phone;
     }
 
-    private static void setQueryValues(Phone phone, PreparedStatement ps, Long key) throws SQLException {
+    private void setQueryValues(Phone phone, PreparedStatement ps, Long key) throws SQLException {
         int i = 1;
         ps.setString(i++, phone.getModel());
         ps.setString(i++, phone.getColor());
@@ -86,6 +81,11 @@ public class JdbcPhoneDao implements PhoneDao {
         ps.setString(i++, phone.getCamera());
         ps.setBigDecimal(i++, phone.getPrice());
         if ( key != null ) ps.setLong(i, key);
+    }
+
+    @Resource(name = "dataSource")
+    public void setDataSource(DataSource dataSource) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
 }

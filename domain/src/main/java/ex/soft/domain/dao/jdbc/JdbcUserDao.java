@@ -19,7 +19,7 @@ public class JdbcUserDao implements UserDao {
 
     public static final String INSERT = "INSERT INTO Users (firstName, lastName, deliveryAddress, contactPhoneNo, login, password) VALUES (?,?,?,?,?,?)";
     public static final String UPDATE = "UPDATE Users SET firstName=?, lastName=?, deliveryAddress=?, contactPhoneNo=?, login=?, password=?, WHERE id=?";
-    public static final String GET = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, login, password FROM Users WHERE id=?";
+    public static final String GET = "SELECT id, firstName, lastName, login, password FROM Users WHERE id=?";
     public static final String DELETE = "DELETE FROM Users WHERE id=?";
 
     private JdbcTemplate jdbcTemplate;
@@ -60,31 +60,27 @@ public class JdbcUserDao implements UserDao {
         jdbcTemplate.update(DELETE, new Object[]{key}, new int[]{Types.BIGINT});
     }
 
-    @Resource(name = "dataSource")
-    public void setDataSource(DataSource dataSource){
-        jdbcTemplate = new JdbcTemplate(dataSource);
-    }
-
-    private static User setUserProperties(User user, ResultSet rs) throws SQLException {
+    private User setUserProperties(User user, ResultSet rs) throws SQLException {
         user.setKey(rs.getLong("id"));
         user.setFirstName(rs.getString("firstName"));
         user.setLastName(rs.getString("lastName"));
-        user.setDeliveryAddress(rs.getString("deliveryAddress"));
-        user.setContactPhoneNo(rs.getString("contactPhoneNo"));
         user.setLogin(rs.getString("login"));
         user.setPassword(rs.getString("password"));
         return user;
     }
 
-    private static void setQueryValues(User user, PreparedStatement ps, Long key) throws SQLException {
+    private void setQueryValues(User user, PreparedStatement ps, Long key) throws SQLException {
         int i = 1;
         ps.setString(i++, user.getFirstName());
         ps.setString(i++, user.getLastName());
-        ps.setString(i++, user.getDeliveryAddress());
-        ps.setString(i++, user.getContactPhoneNo());
         ps.setString(i++, user.getLogin());
         ps.setString(i++, user.getPassword());
         if (key != null) ps.setLong(i, key);
-
     }
+
+    @Resource(name = "dataSource")
+    public void setDataSource(DataSource dataSource){
+        jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
 }

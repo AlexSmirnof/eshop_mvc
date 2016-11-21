@@ -2,12 +2,16 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="tag" tagdir="/WEB-INF/tags" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+
 <c:set var="productList" value="${pageContext.request.contextPath}/productList" scope="page"/>
 <c:set var="cartPage" value="${pageContext.request.contextPath}/cart" scope="page"/>
 <c:set var="orderPage" value="${pageContext.request.contextPath}/order" scope="page"/>
+
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Cart</title>
     <tag:style/>
     <tag:bootstrap/>
@@ -49,7 +53,7 @@
                     <td>${product.price}</td>
                     <td>
                         <form:input path="orderItems[${status.index}].quantity" class="quantityField" size="10" value="${orderItem.quantity}"/>
-                        <span class="error"><form:errors path="orderItems[${status.index}].quantity"/></span>
+                        <br/><span class="error"><form:errors path="orderItems[${status.index}].quantity"/></span>
                     </td>
                     <td>
                         <button formaction="${cartPage}/delete/${product.key}" class="btn btn-danger">Delete</button>

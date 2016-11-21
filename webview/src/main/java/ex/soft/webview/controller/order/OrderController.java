@@ -2,6 +2,7 @@ package ex.soft.webview.controller.order;
 
 import ex.soft.domain.model.Order;
 import ex.soft.service.OrderService;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,19 +29,28 @@ public class OrderController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String showOrderPage(Model model, HttpSession session){
-        LOGGER.info("Show Order Page");
+        if(LOGGER.isEnabledFor(Level.INFO)){
+            LOGGER.info("Show Order Page");
+        }
         Order order = orderService.createOrder(session);
         model.addAttribute("order", order);
-        LOGGER.info(order);
+        if(LOGGER.isEnabledFor(Level.INFO)){
+            LOGGER.info(order);
+        }
         return "order/order";
     }
 
     @RequestMapping(value = "confirm", method = RequestMethod.POST)
-    public String placeOrder(@Valid @ModelAttribute Order order, BindingResult result, HttpSession session){
-        LOGGER.info("Place Order");
-        LOGGER.info(order);
+    public String placeOrder(@ModelAttribute @Valid Order order, BindingResult result,
+                             HttpSession session) {
+        if(LOGGER.isEnabledFor(Level.INFO)){
+            LOGGER.info("Place Order");
+            LOGGER.info(order);
+        }
         if(result.hasErrors()){
-            LOGGER.error(result.getFieldErrors());
+            if(LOGGER.isEnabledFor(Level.INFO)){
+                LOGGER.info(result.getFieldErrors());
+            }
             return "order/order";
         }
         Long key = orderService.placeOrder(session, order);

@@ -8,4 +8,8 @@
 
     <context:component-scan base-package="ex.soft.service.**"/>
 
+    <bean id="userService" class="ex.soft.service.UserService" >
+        <lookup-method name="getUser" bean="anonymous"/>
+    </bean>
+
 </beans>

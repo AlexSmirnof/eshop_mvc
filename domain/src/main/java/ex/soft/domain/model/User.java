@@ -1,16 +1,25 @@
 package ex.soft.domain.model;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+
 /**
  * Created by Alex108 on 19.10.2016.
  */
+@Component("anonymous")
+@PropertySource("classpath:messages/user.properties")
 public class User {
 
+    @Value("${anonymous.key}")
     private Long key;
+    @Value("${anonymous.firstName}")
     private String firstName;
+    @Value("${anonymous.lastName}")
     private String lastName;
-    private String deliveryAddress;
-    private String contactPhoneNo;
+    @Value("${anonymous.login}")
     private String login;
+    @Value("${anonymous.password}")
     private String password;
 
     public User() {}
@@ -55,30 +64,11 @@ public class User {
         this.password = password;
     }
 
-    public String getDeliveryAddress() {
-        return deliveryAddress;
-    }
-
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public String getContactPhoneNo() {
-        return contactPhoneNo;
-    }
-
-    public void setContactPhoneNo(String contactPhoneNo) {
-        this.contactPhoneNo = contactPhoneNo;
-    }
-
     @Override
     public String toString() {
-        return "User{" +
-                "key=" + key +
+        return "User{key=" + key +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", deliveryAddress='" + deliveryAddress + '\'' +
-                ", contactPhoneNo='" + contactPhoneNo + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 '}';

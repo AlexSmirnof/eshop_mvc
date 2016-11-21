@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="tag" tagdir="/WEB-INF/tags" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <c:set var="productList" value="${pageContext.request.contextPath}/productList" scope="page"/>
@@ -14,6 +15,7 @@
 
 <html>
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Order</title>
     <tag:style/>
     <tag:bootstrap/>
@@ -60,7 +62,10 @@
             <tr>
                 <td colspan="3" class="hideme"></td>
                 <td>Delivery</td>
-                <td>5$</td>
+                <td>
+                    <spring:eval expression="@prices['product.delivery']" var="delivery"/>
+                    ${delivery}$
+                </td>
             </tr>
             <tr>
                 <td colspan="3" class="hideme"></td>
@@ -68,7 +73,7 @@
                 <td>
                     <%--<fmt:formatNumber var="total" pattern="000.00" value="${orderC.totalPrice + 5}"/>--%>
                     <%--<c:out value="${total}"/>--%>
-                    ${totalPrice + 5}$
+                    ${totalPrice + delivery}$
                 </td>
             </tr>
         </table>
@@ -112,10 +117,9 @@
             </tr>
             <tr>
                 <td>
-                    <form:hidden path="orderItems"    value="${orderItemsList}"/>
+                    <%--<form:hidden path="orderItems"    value="${orderItemsList}"/>--%>
                     <form:hidden path="totalQuantity" value="${order.totalQuantity}"/>
-                    <form:hidden path="totalPrice"    value="${totalPrice + 5}"/>
-
+                    <form:hidden path="totalPrice"    value="${totalPrice + delivery}"/>
                     <form:button class="btn btn-success">Order</form:button>
                 </td>
             </tr>

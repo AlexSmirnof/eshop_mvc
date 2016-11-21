@@ -25,4 +25,7 @@
             <value>org.springframework.web.servlet.view.JstlView</value>
         </property>
     </bean>
+
+    <mvc:annotation-driven conversion-service="conversionService"/>
+
 </beans>

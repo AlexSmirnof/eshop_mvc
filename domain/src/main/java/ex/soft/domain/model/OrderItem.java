@@ -1,11 +1,14 @@
 package ex.soft.domain.model;
 
+import org.springframework.stereotype.Component;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
  * Created by Alex108 on 11.10.2016.
  */
+@Component
 public class OrderItem {
 
     private Phone phone;

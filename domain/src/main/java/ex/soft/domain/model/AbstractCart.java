@@ -1,5 +1,7 @@
 package ex.soft.domain.model;
 
+import org.springframework.stereotype.Component;
+
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.List;
 /**
  * Created by Alex108 on 05.11.2016.
  */
+@Component
 public abstract class AbstractCart{
 
     private Long totalQuantity;

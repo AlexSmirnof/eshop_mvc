@@ -1,12 +1,14 @@
 package ex.soft.domain.model;
 
+import org.springframework.stereotype.Component;
+
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
  * Created by Alex108 on 11.10.2016.
  */
+@Component
 public class Order extends AbstractCart{
 
     private Long key;
@@ -24,12 +26,13 @@ public class Order extends AbstractCart{
     private String deliveryAddress;
 
     @NotNull(message = "PhoneNo can not be empty")
-    @Pattern(regexp="\\(\\d{3}\\)\\d{3}-\\d{4}")
+//    @Pattern(regexp="\\(\\d{3}\\)\\d{3}-\\d{4}")
     private String contactPhoneNo;
 
     @Size(min=2, max=250)
     private String description;
-    private Long userId;
+
+    private User user;
 
     public Order() {}
 
@@ -81,24 +84,23 @@ public class Order extends AbstractCart{
         this.description = description;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public String toString() {
-        return "Order{" +
-                "key=" + key +
+        return "Order{key=" + key +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", contactPhoneNo='" + contactPhoneNo + '\'' +
                 ", description='" + description + '\'' +
-                ", userId=" + userId + "\', " +
+                ", userId=" + user + "\', " +
                  super.toString() + '}';
     }
 }
