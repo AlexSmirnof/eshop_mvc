@@ -111,6 +111,13 @@
         });
     };
     
+    window.preventDefaultOnEnter = function (event) {
+        if (event.keyCode === 13){
+            event.preventDefault();
+            $('form#cart').submit();
+        }
+    } 
+    
     /*переход на cart.jsp при клике на cartWidget*/
     $(document).ready(function() {
         $('#cartWidget').bind('click', function () {

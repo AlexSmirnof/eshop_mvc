@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 
 /**
  * Created by Alex108 on 11.10.2016.
@@ -31,6 +32,8 @@ public class Order extends AbstractCart{
 
     @Size(min=2, max=250)
     private String description;
+
+    private BigDecimal subTotalPrice;
 
     private User user;
 
@@ -84,6 +87,14 @@ public class Order extends AbstractCart{
         this.description = description;
     }
 
+    public BigDecimal getSubTotalPrice() {
+        return subTotalPrice;
+    }
+
+    public void setSubTotalPrice(BigDecimal subTotalPrice) {
+        this.subTotalPrice = subTotalPrice;
+    }
+
     public User getUser() {
         return user;
     }
@@ -100,7 +111,8 @@ public class Order extends AbstractCart{
                 ", deliveryAddress='" + deliveryAddress + '\'' +
                 ", contactPhoneNo='" + contactPhoneNo + '\'' +
                 ", description='" + description + '\'' +
-                ", userId=" + user + "\', " +
-                 super.toString() + '}';
+                super.toString() +
+                ", subTotalPrice=" + subTotalPrice + "\', " +
+                ", userId=" + user + '}';
     }
 }

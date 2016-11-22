@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService<Phone> {
 
+    @Resource(name = "phoneDao")
     private PhoneDao phoneDao;
 
     @Transactional

@@ -7,6 +7,11 @@
 .errorBorder{
     border: 1px solid #f00;
 }
+.title{
+    font-size: 2.5em;
+    margin-right: 20px;
+    line-height: 2em;
+}
 /*header styles*/
 header{
     border-bottom: 1px solid #000;

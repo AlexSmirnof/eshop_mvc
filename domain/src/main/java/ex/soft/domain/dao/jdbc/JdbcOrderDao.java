@@ -25,12 +25,12 @@ import java.util.List;
 @Repository("orderDao")
 public class JdbcOrderDao implements OrderDao {
 
-    public static final String FIND_ALL = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, user_id FROM Orders";
-    public static final String GET      = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, user_id FROM Orders WHERE id = :key";
-    public static final String INSERT   = "INSERT INTO Orders (firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, user_id) " +
-                                                     "VALUES (:firstName, :lastName, :deliveryAddress, :contactPhoneNo, :description, :totalQuantity, :totalPrice, :user_id)";
-    public static final String UPDATE   = "UPDATE Orders SET firstName = :firstName, lastName = :lastName, deliveryAddress = :deliveryAddress, " +
-                                                            "contactPhoneNo = :contactPhoneNo, description = :description, totalQuantity = :totalQuantity, totalPrice = :totalPrice, user_id = :user_id WHERE id = :key";
+    public static final String FIND_ALL = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, subTotalPrice, user_id FROM Orders";
+    public static final String GET      = "SELECT id, firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, subTotalPrice, user_id FROM Orders WHERE id = :key";
+    public static final String INSERT   = "INSERT INTO Orders (firstName, lastName, deliveryAddress, contactPhoneNo, description, totalQuantity, totalPrice, subTotalPrice, user_id) " +
+                                                     "VALUES (:firstName, :lastName, :deliveryAddress, :contactPhoneNo, :description, :totalQuantity, :totalPrice, :subTotalPrice, :user_id)";
+    public static final String UPDATE   = "UPDATE Orders SET firstName = :firstName, lastName = :lastName, deliveryAddress = :deliveryAddress, contactPhoneNo = :contactPhoneNo, description = :description, " +
+                                                            "totalQuantity = :totalQuantity, totalPrice = :totalPrice, subTotalPrice = :subTotalPrice,user_id = :user_id WHERE id = :key";
     public static final String FIND_ALL_ORDER_ITEMS_BY_KEY = "SELECT phone_id, quantity FROM OrderItems WHERE order_id = :order_id";
     public static final String GET_ORDER_ITEM_BY_KEY       = "SELECT phone_id, quantity FROM OrderItems WHERE order_id = :key";
     public static final String INSERT_ORDER_ITEM           = "INSERT INTO OrderItems (phone_id, quantity, order_id) VALUES (:phone_id, :quantity, :order_id)";
@@ -113,6 +113,7 @@ public class JdbcOrderDao implements OrderDao {
         order.setDescription(rs.getString("description"));
         order.setTotalQuantity(rs.getLong("totalQuantity"));
         order.setTotalPrice(rs.getBigDecimal("totalPrice"));
+        order.setSubTotalPrice(rs.getBigDecimal("subTotalPrice"));
         Long userId = rs.getLong("user_id");
         User user = userDao.get(userId);
         order.setUser(user);
@@ -133,6 +134,7 @@ public class JdbcOrderDao implements OrderDao {
                                  .addValue("description", order.getDescription())
                                  .addValue("totalQuantity", order.getTotalQuantity())
                                  .addValue("totalPrice", order.getTotalPrice())
+                                 .addValue("subTotalPrice", order.getSubTotalPrice())
                                  .addValue("user_id", order.getUser().getKey());
         return key == null ? paramSource : paramSource.addValue("key", key);
     }

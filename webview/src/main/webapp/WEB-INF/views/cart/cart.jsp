@@ -23,7 +23,12 @@
         <tag:header showCartWidget="true"/>
     </div>
     <div class="row">
-        <h2>Cart</h2>
+        <span class="title">Cart</span>
+        <c:if test="${not empty flashMessage}">
+            <span class="bg-success">
+                    ${flashMessage}
+            </span>
+        </c:if>
     </div>
     <div class="row">
         <nav class="cart">
@@ -52,7 +57,8 @@
                     <td>${product.displaySize}</td>
                     <td>${product.price}</td>
                     <td>
-                        <form:input path="orderItems[${status.index}].quantity" class="quantityField" size="10" value="${orderItem.quantity}"/>
+                        <form:input path="orderItems[${status.index}].quantity" class="quantityField" size="10" value="${orderItem.quantity}"
+                                    onkeydown="preventDefaultOnEnter(event);" />
                         <br/><span class="error"><form:errors path="orderItems[${status.index}].quantity"/></span>
                     </td>
                     <td>
@@ -63,7 +69,7 @@
         </table>
 
         <div class="cartBtns cartForms">
-             <form:button class="btn btn-success">Update</form:button>
+             <form:button id="updateBtn" class="btn btn-success">Update</form:button>
         </div>
 
        </form:form>
@@ -76,6 +82,7 @@
 
     </div>
 </div>
+
 
 
 </body>

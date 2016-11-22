@@ -4,24 +4,32 @@ import ex.soft.domain.dao.OrderDao;
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Order;
 import ex.soft.domain.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 
 /**
  * Created by Alex108 on 14.10.2016.
  */
 @Service("orderService")
+@PropertySource("classpath:messages/prices.properties")
 public class OrderService {
 
     private static final String CART_ATTRIBUTE_NAME = "cart";
 
+    @Value("${product.delivery}")
+    private BigDecimal DELIVERY_PRICE;
+
     @Resource(name = "orderDao")
     private OrderDao orderDao;
 
-    @Resource(name = "userService")
+    @Autowired
     private UserService userService;
 
     @Resource(name = "cart")
@@ -48,7 +56,8 @@ public class OrderService {
         Cart cart = getCartSafely(session);
         order.setOrderItems(cart.getOrderItems());
         order.setTotalQuantity(cart.getTotalQuantity());
-        order.setTotalPrice(cart.getTotalPrice());
+        order.setSubTotalPrice(cart.getTotalPrice());
+        order.setTotalPrice(cart.getTotalPrice().add(DELIVERY_PRICE));
         order.setUser(user);
 //        session.invalidate();
         session.removeAttribute(CART_ATTRIBUTE_NAME);

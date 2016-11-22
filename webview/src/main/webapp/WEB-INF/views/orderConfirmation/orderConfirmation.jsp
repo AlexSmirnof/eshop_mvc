@@ -48,21 +48,20 @@
             <tr>
                 <td colspan="3" class="hideme"></td>
                 <td>Subtotal</td>
-                <td>${order.totalPrice}$</td>
+                <td>${order.subTotalPrice}$</td>
             </tr>
             <tr>
                 <td colspan="3" class="hideme"></td>
                 <td>Delivery</td>
                 <td>
-                    <spring:eval expression="@prices['product.delivery']" var="delivery"/>
-                    ${delivery}$
+                    <spring:eval expression="@prices['product.delivery']"/>$
                 </td>
             </tr>
             <tr>
                 <td colspan="3" class="hideme"></td>
                 <td>TOTAL</td>
                 <td>
-                    ${order.totalPrice + delivery}$
+                    ${order.totalPrice}$
                 </td>
             </tr>
         </table>
