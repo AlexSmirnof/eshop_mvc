@@ -3,6 +3,7 @@ package ex.soft.domain.model;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * Created by Alex108 on 05.11.2016.
  */
 @Component
-public abstract class AbstractCart{
+public abstract class AbstractCart implements Serializable{
 
     private Long totalQuantity;
     private BigDecimal totalPrice;

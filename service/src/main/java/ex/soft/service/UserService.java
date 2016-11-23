@@ -8,5 +8,4 @@ import ex.soft.domain.model.User;
 public abstract class UserService {
 
     public abstract User getUser();
-
 }

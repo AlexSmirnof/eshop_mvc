@@ -59,11 +59,16 @@ public class CartController {
 
     @ModelAttribute("cart")
     public Cart showCartWidget(HttpSession session) {
+        LOGGER.info("------------");
+        LOGGER.info("Cart Widget");
+        LOGGER.info(cartService.getCart(session).getOrderItems());
+        LOGGER.info("-------------");
         return cartService.getCart(session);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String showCartPage(){
+        LOGGER.info("Cart Page");
         return "cart/cart";
     }
 
@@ -107,10 +112,12 @@ public class CartController {
     }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public String updateProductsInCart(@ModelAttribute("cart") @Valid Cart cart, BindingResult result,
+    public String updateProductsInCart( @Valid Cart cart, BindingResult result,
                                        HttpSession session, RedirectAttributes redirectAttributes){
         if(LOGGER.isEnabledFor(Level.INFO)){
             LOGGER.info("Update products in cart");
+            LOGGER.info(cart.getOrderItems());
+            LOGGER.info(cartService.getCart(session).getOrderItems());
         }
         if(result.hasErrors()){
             if(LOGGER.isEnabledFor(Level.INFO)){
@@ -121,8 +128,8 @@ public class CartController {
                 LOGGER.info(result.getFieldError().getRejectedValue());
                 LOGGER.info(result.getFieldError().getDefaultMessage());
                 LOGGER.info(result.getFieldError().getCode());
-                LOGGER.info(result.getFieldError().getArguments()[0]);
-                LOGGER.info(result.getFieldErrors());
+                LOGGER.info(cart.getOrderItems());
+                LOGGER.info(cartService.getCart(session).getOrderItems());
             }
             return "cart/cart";
         } else {
@@ -136,7 +143,12 @@ public class CartController {
     }
 
     @RequestMapping(value = "/order", method = RequestMethod.GET)
-    public String forwardToOrderPage(){
+    public String forwardToOrderPage(HttpSession session){
+        LOGGER.info("-----------------");
+        LOGGER.info("Redirect To Order");
+        LOGGER.info(cartService.getCart(session).getOrderItems());
+        LOGGER.info(session.getAttribute("cart"));
+        LOGGER.info("-----------------");
         return "redirect:/order";
     }
 

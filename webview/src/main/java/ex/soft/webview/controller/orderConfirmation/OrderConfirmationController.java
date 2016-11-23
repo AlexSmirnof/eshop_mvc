@@ -1,7 +1,7 @@
 package ex.soft.webview.controller.orderConfirmation;
 
 import ex.soft.domain.model.Order;
-import ex.soft.service.OrderService;
+import ex.soft.service.api.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -28,9 +28,5 @@ public class ProductServiceImpl implements ProductService<Phone> {
         return phoneDao.findAll();
     }
 
-    @Resource(name = "phoneDao")
-    public void setPhoneDao(PhoneDao phoneDao) {
-        this.phoneDao = phoneDao;
-    }
 
 }

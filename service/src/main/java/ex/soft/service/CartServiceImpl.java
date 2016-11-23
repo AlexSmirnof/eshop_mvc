@@ -6,8 +6,8 @@ import ex.soft.domain.model.Phone;
 import ex.soft.service.api.CartService;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -19,8 +19,8 @@ public class CartServiceImpl implements CartService {
 
     private static final String CART_ATTRIBUTE_NAME = "cart";
 
-    @Resource
-    private Cart cart;
+//    @Resource
+//    private Cart cart;
 
     @Override
     public Cart getCart(HttpSession session){
@@ -35,14 +35,17 @@ public class CartServiceImpl implements CartService {
     @Override
     public void updateCart(HttpSession session, Cart cart) {
         updateCartTotalPriceAndQuantity(cart);
-        session.setAttribute(CART_ATTRIBUTE_NAME, cart);
+        persistCart(session, cart);
+        System.out.println("+++Cart setted in updateCart");
     }
 
     @Override
     public Long addToCart(HttpSession session, Phone phone, Long quantity){
         Cart cart = getCartSafely(session);
         updateCartWithNewProduct(cart, phone, quantity);
-        session.setAttribute(CART_ATTRIBUTE_NAME, cart);
+        System.out.println(cart);
+        persistCart(session, cart);
+        System.out.println("+++Cart setted in addToCart");
         return quantity;
     }
 
@@ -50,14 +53,25 @@ public class CartServiceImpl implements CartService {
     public Long deleteFromCart(HttpSession session, Long key){
         Cart cart = getCartSafely(session);
         Long result = updateCartWithoutProduct(cart, key);
-        session.setAttribute(CART_ATTRIBUTE_NAME, cart);
+        persistCart(session, cart);
+        System.out.println("+++Cart setted in deleteFromCart");
         return result;
     }
 
 
     private Cart getCartSafely(HttpSession session){
-        Cart cart = (Cart) session.getAttribute(CART_ATTRIBUTE_NAME);
-        return cart != null ? cart : new Cart();
+
+        byte[] array = (byte[]) session.getAttribute(CART_ATTRIBUTE_NAME);
+        if(array == null) return new Cart();
+        Cart cart = deserializeCart(array);
+        return cart == null ? new Cart() : cart;
+
+/*      Cart cart = (Cart) session.getAttribute(CART_ATTRIBUTE_NAME);
+        return cart != null ? cart : new Cart();*/
+    }
+
+    private void persistCart(HttpSession session, Cart cart){
+        session.setAttribute(CART_ATTRIBUTE_NAME, serializeCart(cart));
     }
 
     private void updateCartWithNewProduct(Cart cart, Phone phone, Long quantity){
@@ -121,8 +135,30 @@ public class CartServiceImpl implements CartService {
     }
 
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+
+    private byte[] serializeCart(Cart cart){
+        try(ByteArrayOutputStream baos = new ByteArrayOutputStream()){
+            try(ObjectOutput oos = new ObjectOutputStream(baos)){
+                oos.writeObject(cart);
+                oos.flush();
+            }
+            return baos.toByteArray();
+        } catch (IOException ignore) {
+            System.err.println(ignore.toString());
+        }
+        return null;
     }
+
+    private Cart deserializeCart(byte[] array) {
+        try(ByteArrayInputStream bais = new ByteArrayInputStream(array)){
+            try(ObjectInput ois = new ObjectInputStream(bais)){
+                return (Cart) ois.readObject();
+            }
+        } catch (ClassNotFoundException | IOException ignore){
+            System.err.println(ignore.toString());
+        }
+        return null;
+    }
+
 
 }

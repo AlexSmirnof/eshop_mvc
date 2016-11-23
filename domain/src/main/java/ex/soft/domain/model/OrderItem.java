@@ -4,12 +4,13 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * Created by Alex108 on 11.10.2016.
  */
 @Component
-public class OrderItem {
+public class OrderItem implements Serializable{
 
     private Phone phone;
 

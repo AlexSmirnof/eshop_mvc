@@ -5,6 +5,11 @@ INSERT INTO Phones (model,color,displaySize,ph_length,width,camera,price) VALUES
 INSERT INTO Phones (model,color,displaySize,ph_length,width,camera,price) VALUES ('Samsung Galaxy S6 32GB','black','4"','14mm','56mm','12MP','300.00');
 COMMIT;
 
+START TRANSACTION
+INSERT INTO Users (firstName,lastName,login,password) VALUES ('Anonymous','XXX','xxx','xxx');
+COMMIT;
+
+-- START TRANSACTION
 -- INSERT INTO Phones (model,color,displaySize,price) VALUES ('Iphone 5','black','8"','500.00');
 -- INSERT INTO Phones (model,color,displaySize,price) VALUES ('IPhone 6','black','8"','650.00');
 -- COMMIT;

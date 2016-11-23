@@ -12,7 +12,7 @@
         <module>domain</module>
         <module>service</module>
         <module>webview</module>
-</modules>
+    </modules>
 
     <properties>
         <spring.version>4.1.1.RELEASE</spring.version>
