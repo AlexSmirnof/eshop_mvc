@@ -114,11 +114,11 @@
     window.preventDefaultOnEnter = function (event) {
         if (event.keyCode === 13){
             event.preventDefault();
-            $('form#cart').submit();
+            $('form#cartForm').submit();
         }
     } 
     
-    /*переход на cart.jsp при клике на cartWidget*/
+    /*переход на form.jsp при клике на cartWidget*/
     $(document).ready(function() {
         $('#cartWidget').bind('click', function () {
             location.href = 'cart';

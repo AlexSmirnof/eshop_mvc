@@ -20,8 +20,8 @@
     </div> <%--Gallivant--%>
         <c:if test="${showCartWidget}">
             <button id="cartWidget" class="btn btn-info"><u>My cart:</u>
-            <span id="cartItems">${empty cart.totalQuantity ? 0 : cart.totalQuantity}</span>
-            items <span id="cartPrice">${empty cart.totalPrice ? 0 : cart.totalPrice}</span>$
+            <span id="cartItems">${empty cartForm.totalQuantity ? 0 : cartForm.totalQuantity}</span>
+            items <span id="cartPrice">${empty cartForm.totalPrice ? 0.00 : cartForm.totalPrice}</span>$
             </button>
         </c:if>
 

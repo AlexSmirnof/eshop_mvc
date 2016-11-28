@@ -1,43 +1,22 @@
 package ex.soft.domain.model;
 
-import org.springframework.stereotype.Component;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 /**
  * Created by Alex108 on 11.10.2016.
  */
-@Component
+
 public class Order extends AbstractCart{
 
     private Long key;
-
-    @NotNull(message = "Fist Name can not be empty")
-    @Size(min = 2)
     private String firstName;
-
-    @NotNull(message = "Last Name can not be empty")
-    @Size(min = 2)
     private String lastName;
-
-    @NotNull(message = "Address can not be empty")
-    @Size(min = 5)
     private String deliveryAddress;
-
-    @NotNull(message = "PhoneNo can not be empty")
-//    @Pattern(regexp="\\(\\d{3}\\)\\d{3}-\\d{4}")
     private String contactPhoneNo;
-
-    @Size(min=2, max=250)
     private String description;
-
     private BigDecimal subTotalPrice;
-
     private User user;
 
-    public Order() {}
 
     public Long getKey() {
         return key;

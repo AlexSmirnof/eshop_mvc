@@ -10,9 +10,6 @@
 <c:set var="orderPage"   value="${pageContext.request.contextPath}/order"       scope="page"/>
 <c:set var="cartPage"    value="${pageContext.request.contextPath}/cart"        scope="page"/>
 
-<c:set var="orderItemsList" value="${order.orderItems}"  scope="page"/>
-<c:set var="totalPrice"     value="${order.totalPrice}"  scope="page"/>
-
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -44,7 +41,7 @@
                 <th>Quantity</th>
                 <th>Price</th>
             </tr>
-            <c:forEach var="orderItem" items="${orderItemsList}">
+            <c:forEach var="orderItem" items="${orderForm.orderItemForms}">
                 <c:set var="phone" value="${orderItem.phone}" scope="page"/>
                 <tr>
                     <td>${phone.model}</td>
@@ -57,7 +54,7 @@
             <tr>
                 <td colspan="3" class="hideme"></td>
                 <td>Subtotal</td>
-                <td>${totalPrice}$</td>
+                <td>${orderForm.totalPrice}$</td>
             </tr>
             <tr>
                 <td colspan="3" class="hideme"></td>
@@ -71,55 +68,54 @@
                 <td colspan="3" class="hideme"></td>
                 <td>TOTAL</td>
                 <td>
-                    <%--<fmt:formatNumber var="total" pattern="000.00" value="${orderC.totalPrice + 5}"/>--%>
-                    <%--<c:out value="${total}"/>--%>
-                    ${totalPrice + delivery}$
+                    ${orderForm.totalPrice + delivery}$
                 </td>
             </tr>
         </table>
     </div>
 
     <div class="row">
-        <form:form action="${orderPage}/confirm" method="POST" modelAttribute="order">
+        <form:form action="${orderPage}/confirm" method="POST" modelAttribute="orderForm">
         <table class="order">
             <tr>
                 <td>First name</td>
                 <td>
                     <form:input path="firstName"  placeholder="First name" />
-                    <br/><span class="error"><form:errors path="firstName"/></span>
+                    <br/><form:errors path="firstName" cssClass="error"/>
                 </td>
             </tr>
             <tr>
                 <td>Last Name</td>
                 <td>
                     <form:input path="lastName"  placeholder="Last name" />
-                    <br/><span class="error"><form:errors path="lastName"/></span>
+                    <br/><form:errors path="lastName" cssClass="error"/>
                 </td>
             </tr>
             <tr>
                 <td>Address</td>
                 <td>
                     <form:input path="deliveryAddress"  placeholder="Address" />
-                    <br/><span class="error"><form:errors path="deliveryAddress"/></span>
+                    <br/><form:errors path="deliveryAddress" cssClass="error"/>
                 </td>
             </tr>
             <tr>
                 <td>Phone</td>
                 <td>
                     <form:input path="contactPhoneNo"  placeholder="Phone" />
-                    <br/><span class="error"><form:errors path="contactPhoneNo"/></span>
+                    <br/><form:errors path="contactPhoneNo" cssClass="error"/>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     <form:textarea path="description"  placeholder="Additional information" ></form:textarea>
+                    <br/><form:errors path="description" cssClass="error"/>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <%--<form:hidden path="orderItems"    value="${orderItemsList}"/>--%>
-                    <form:hidden path="totalQuantity" value="${order.totalQuantity}"/>
-                    <form:hidden path="totalPrice"    value="${totalPrice + delivery}"/>
+                    <%--<form:hidden path="orderItemForms"    value="${orderItemsList}"/>--%>
+                    <%--<form:hidden path="totalQuantity" value="${order.totalQuantity}"/>--%>
+                    <%--<form:hidden path="totalPrice"    value="${totalPrice + delivery}"/>--%>
                     <form:button class="btn btn-success">Order</form:button>
                 </td>
             </tr>

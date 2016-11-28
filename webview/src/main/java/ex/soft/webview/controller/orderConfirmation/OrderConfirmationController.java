@@ -16,13 +16,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class OrderConfirmationController {
 
+    private static final String ORDER_ATTRIBUTE = "order";
+
     @Autowired
     private OrderService orderService;
 
-    @RequestMapping(value = "{key}", method = RequestMethod.GET)
+    @RequestMapping(value = "{key:[\\d]+}", method = RequestMethod.GET)
     public String showOrderConfirmation(@PathVariable Long key, Model model){
         Order order = orderService.getOrder(key);
-        model.addAttribute("order", order);
+        model.addAttribute(ORDER_ATTRIBUTE, order);
         return "orderConfirmation/orderConfirmation";
     }
 

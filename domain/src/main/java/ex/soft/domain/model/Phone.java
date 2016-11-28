@@ -2,14 +2,13 @@ package ex.soft.domain.model;
 
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  * Created by Alex108 on 11.10.2016.
  */
 @Component
-public class Phone implements Serializable{
+public class Phone {
 
     private Long key;
     private String model;

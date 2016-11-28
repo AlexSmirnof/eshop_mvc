@@ -1,5 +1,6 @@
 package ex.soft.service.api;
 
+import ex.soft.domain.form.CartForm;
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Phone;
 
@@ -14,7 +15,7 @@ public interface CartService {
 
    void removeCart(HttpSession session);
 
-    void updateCart(HttpSession session, Cart cart);
+    void updateCart(HttpSession session, CartForm cartForm);
 
     Long addToCart(HttpSession session, Phone phone, Long quantity);
 

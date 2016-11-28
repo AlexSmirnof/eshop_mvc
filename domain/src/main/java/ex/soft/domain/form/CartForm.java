@@ -1,28 +1,24 @@
-package ex.soft.domain.model;
-
-import org.springframework.stereotype.Component;
+package ex.soft.domain.form;
 
 import javax.validation.Valid;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Alex108 on 05.11.2016.
+ * Created by Alex108 on 24.11.2016.
  */
-@Component
-public abstract class AbstractCart implements Serializable{
+public class CartForm {
 
     private Long totalQuantity;
     private BigDecimal totalPrice;
     @Valid
-    private List<OrderItem> orderItems;
+    private List<OrderItemForm> orderItemForms;
 
-    public AbstractCart() {
+    public CartForm() {
         totalQuantity = 0L;
         totalPrice = BigDecimal.ZERO;
-        orderItems = new ArrayList<>();
+        orderItemForms = new ArrayList<>();
     }
 
     public Long getTotalQuantity() {
@@ -41,18 +37,21 @@ public abstract class AbstractCart implements Serializable{
         this.totalPrice = totalPrice;
     }
 
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
+    public List<OrderItemForm> getOrderItemForms() {
+        return orderItemForms;
     }
 
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
+    public void setOrderItemForms(List<OrderItemForm> orderItemForms) {
+        this.orderItemForms = orderItemForms;
     }
 
     @Override
     public String toString() {
-        return  "totalQuantity=" + totalQuantity +
+        return "CartForm{" +
+                "totalQuantity=" + totalQuantity +
                 ", totalPrice=" + totalPrice +
-                ", orderItems=" + orderItems;
+                ", orderItemForms=" + orderItemForms +
+                '}';
     }
+
 }

@@ -2,25 +2,19 @@ package ex.soft.domain.model;
 
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-
 /**
  * Created by Alex108 on 11.10.2016.
  */
 @Component
-public class OrderItem implements Serializable{
+public class OrderItem {
 
     private Phone phone;
-
-    @NotNull(message = "Quantity can not be empty")
-    @Min(value = 1, message = "Quantity must be positive number")
     private Long quantity;
 
     public OrderItem() {
         quantity = 0L;
     }
+
 
     public Phone getPhone() {
         return phone;

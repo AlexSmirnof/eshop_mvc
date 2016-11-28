@@ -24,9 +24,9 @@
     </div>
     <div class="row">
         <span class="title">Cart</span>
-        <c:if test="${not empty flashMessage}">
+        <c:if test="${not empty successMessage}">
             <span class="bg-success">
-                    ${flashMessage}
+                    ${successMessage}
             </span>
         </c:if>
     </div>
@@ -38,7 +38,7 @@
     </div>
     <div class="row">
 
-       <form:form action="${cartPage}/update" method="post" modelAttribute="cart">
+       <form:form id="cartForm" action="${cartPage}/update" method="post" modelAttribute="cartForm">
 
         <table class="product cart">
             <tr>
@@ -49,7 +49,7 @@
                 <th>Quantity</th>
                 <th>Action</th>
             </tr>
-            <c:forEach items="${cart.orderItems}" var="orderItem" varStatus="status" begin="0" step="1">
+            <c:forEach items="${cartForm.orderItemForms}" var="orderItem" varStatus="status" begin="0" step="1">
                 <c:set value="${orderItem.phone}" var="product" scope="page"/>
                 <tr>
                     <td><a href="productDetails?model=${product.model}&key=${product.key}" target="_blank">${product.model}</a></td>
@@ -57,9 +57,8 @@
                     <td>${product.displaySize}</td>
                     <td>${product.price}</td>
                     <td>
-                        <form:input path="orderItems[${status.index}].quantity" class="quantityField" size="10" value="${orderItem.quantity}"
-                                    onkeydown="preventDefaultOnEnter(event);" />
-                        <br/><span class="error"><form:errors path="orderItems[${status.index}].quantity"/></span>
+                        <form:input path="orderItemForms[${status.index}].quantity" class="quantityField" size="10" onkeydown="preventDefaultOnEnter(event);" />
+                        <br/><form:errors cssClass="error" path="orderItemForms[${status.index}].quantity"/>
                     </td>
                     <td>
                         <button formaction="${cartPage}/delete/${product.key}" class="btn btn-danger">Delete</button>

@@ -1,5 +1,6 @@
 package ex.soft.service.api;
 
+import ex.soft.domain.form.OrderForm;
 import ex.soft.domain.model.Order;
 
 import javax.servlet.http.HttpSession;
@@ -9,11 +10,7 @@ import javax.servlet.http.HttpSession;
  */
 public interface OrderService {
 
-    Order createOrder(HttpSession session);
-
-
     Order getOrder(Long key);
 
-
-    Long placeOrder(HttpSession session, Order order);
+    Long placeOrder(HttpSession session, OrderForm orderForm);
 }

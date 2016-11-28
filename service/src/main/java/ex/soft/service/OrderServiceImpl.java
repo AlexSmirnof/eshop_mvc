@@ -1,12 +1,12 @@
 package ex.soft.service;
 
 import ex.soft.domain.dao.OrderDao;
+import ex.soft.domain.form.OrderForm;
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Order;
 import ex.soft.domain.model.User;
 import ex.soft.service.api.CartService;
 import ex.soft.service.api.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -23,30 +23,17 @@ import java.math.BigDecimal;
 @PropertySource("classpath:messages/prices.properties")
 public class OrderServiceImpl implements OrderService {
 
-    private static final String CART_ATTRIBUTE_NAME = "cart";
-
     @Value("${product.delivery}")
     private BigDecimal DELIVERY_PRICE;
 
     @Resource(name = "orderDao")
     private OrderDao orderDao;
 
-    @Autowired
+    @Resource
     private CartService cartService;
 
-    @Autowired
+    @Resource
     private UserService userService;
-
-    @Override
-    @Transactional
-    public Order createOrder(HttpSession session)  {
-        Cart cart = cartService.getCart(session);
-        Order order = new Order();
-        order.setTotalQuantity(cart.getTotalQuantity());
-        order.setTotalPrice(cart.getTotalPrice());
-        order.setOrderItems(cart.getOrderItems());
-        return order;
-    }
 
     @Override
     @Transactional
@@ -56,19 +43,34 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Long placeOrder(HttpSession session, Order order){
-        User user = userService.getUser();
+    public Long placeOrder(HttpSession session, OrderForm orderForm){
+        Order order = createOrder();
         Cart cart = cartService.getCart(session);
-        order.setOrderItems(cart.getOrderItems());
-        order.setTotalQuantity(cart.getTotalQuantity());
-        order.setSubTotalPrice(cart.getTotalPrice());
-        order.setTotalPrice(cart.getTotalPrice().add(DELIVERY_PRICE));
-        order.setUser(user);
-//        session.invalidate();
-        session.removeAttribute(CART_ATTRIBUTE_NAME);
-        return orderDao.save(order);
+        User user = userService.getUser();
+        mapToOrder(order, orderForm, cart, user);
+        Long resultKey = orderDao.save(order);
+        cartService.removeCart(session);
+        return resultKey;
     }
 
+    private Order createOrder(){
+        return new Order();
+    }
 
+    private void mapToOrder(Order order, OrderForm orderForm, Cart cart, User user){
+
+        order.setFirstName      (orderForm.getFirstName());
+        order.setLastName       (orderForm.getLastName());
+        order.setDeliveryAddress(orderForm.getDeliveryAddress());
+        order.setContactPhoneNo (orderForm.getContactPhoneNo());
+        order.setDescription    (orderForm.getDescription());
+
+        order.setOrderItems   (cart.getOrderItems());
+        order.setTotalQuantity(cart.getTotalQuantity());
+        order.setSubTotalPrice(cart.getTotalPrice());
+        order.setTotalPrice   (cart.getTotalPrice().add(DELIVERY_PRICE));
+
+        order.setUser(user);
+    }
 
 }

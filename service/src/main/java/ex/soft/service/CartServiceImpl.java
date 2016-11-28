@@ -1,5 +1,7 @@
 package ex.soft.service;
 
+import ex.soft.domain.form.CartForm;
+import ex.soft.domain.form.OrderItemForm;
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.OrderItem;
 import ex.soft.domain.model.Phone;
@@ -7,8 +9,8 @@ import ex.soft.service.api.CartService;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.io.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,10 +19,8 @@ import java.util.List;
 @Service
 public class CartServiceImpl implements CartService {
 
-    private static final String CART_ATTRIBUTE_NAME = "cart";
+    private static final String CART_ATTRIBUTE_NAME = "form";
 
-//    @Resource
-//    private Cart cart;
 
     @Override
     public Cart getCart(HttpSession session){
@@ -33,19 +33,18 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void updateCart(HttpSession session, Cart cart) {
+    public void updateCart(HttpSession session, CartForm cartForm) {
+        Cart cart = getCartSafely(session);
+        cart.setOrderItems(mapOrderItemFormsToOrderItems(cartForm.getOrderItemForms()));
         updateCartTotalPriceAndQuantity(cart);
-        persistCart(session, cart);
-        System.out.println("+++Cart setted in updateCart");
+        session.setAttribute(CART_ATTRIBUTE_NAME, cart);
     }
 
     @Override
     public Long addToCart(HttpSession session, Phone phone, Long quantity){
         Cart cart = getCartSafely(session);
         updateCartWithNewProduct(cart, phone, quantity);
-        System.out.println(cart);
-        persistCart(session, cart);
-        System.out.println("+++Cart setted in addToCart");
+        session.setAttribute(CART_ATTRIBUTE_NAME, cart);
         return quantity;
     }
 
@@ -53,36 +52,41 @@ public class CartServiceImpl implements CartService {
     public Long deleteFromCart(HttpSession session, Long key){
         Cart cart = getCartSafely(session);
         Long result = updateCartWithoutProduct(cart, key);
-        persistCart(session, cart);
-        System.out.println("+++Cart setted in deleteFromCart");
+        session.setAttribute(CART_ATTRIBUTE_NAME, cart);
         return result;
     }
 
 
-    private Cart getCartSafely(HttpSession session){
-
-        byte[] array = (byte[]) session.getAttribute(CART_ATTRIBUTE_NAME);
-        if(array == null) return new Cart();
-        Cart cart = deserializeCart(array);
-        return cart == null ? new Cart() : cart;
-
-/*      Cart cart = (Cart) session.getAttribute(CART_ATTRIBUTE_NAME);
-        return cart != null ? cart : new Cart();*/
+    private List<OrderItem> mapOrderItemFormsToOrderItems(List<OrderItemForm> orderItemForms){
+        final List<OrderItem> orderItems = new ArrayList<>();
+        for (OrderItemForm orderItemForm : orderItemForms) {
+            final OrderItem orderItem = getOrderItem();
+            orderItem.setPhone(orderItemForm.getPhone());
+            orderItem.setQuantity(orderItemForm.getQuantity());
+            orderItems.add(orderItem);
+        }
+        return orderItems;
     }
 
-    private void persistCart(HttpSession session, Cart cart){
-        session.setAttribute(CART_ATTRIBUTE_NAME, serializeCart(cart));
+
+    private Cart getCartSafely(HttpSession session){
+        Cart cart = (Cart) session.getAttribute(CART_ATTRIBUTE_NAME);
+        return cart != null ? cart : new Cart();
+    }
+
+    private OrderItem getOrderItem(){
+        return new OrderItem();
     }
 
     private void updateCartWithNewProduct(Cart cart, Phone phone, Long quantity){
         int index = findIndexOfProductInCart(cart.getOrderItems(), phone.getKey());
-//  if phone not exist in cart
+//  if phone not exist in form
         if( index < 0 ){
             OrderItem newOrderItem = new OrderItem();
             newOrderItem.setPhone(phone);
             newOrderItem.setQuantity(quantity);
             cart.getOrderItems().add(newOrderItem);
-//  phone already exist in cart so we increase oldQuantity of that phone
+//  phone already exist in form so we increase oldQuantity of that phone
         } else {
             Long oldQuantity = cart.getOrderItems().get(index).getQuantity();
             Long newQuantity = Long.sum(oldQuantity, quantity);
@@ -93,7 +97,7 @@ public class CartServiceImpl implements CartService {
 
     private Long updateCartWithoutProduct(Cart cart, Long key){
         int index = findIndexOfProductInCart(cart.getOrderItems(), key);
-//  if key not exist in cart items -> index = -1
+//  if key not exist in form items -> index = -1
         if ( index < 0 ) {
             return 0L;
         }
@@ -133,32 +137,5 @@ public class CartServiceImpl implements CartService {
                 .mapToLong(item -> item.getQuantity())
                 .sum();
     }
-
-
-
-    private byte[] serializeCart(Cart cart){
-        try(ByteArrayOutputStream baos = new ByteArrayOutputStream()){
-            try(ObjectOutput oos = new ObjectOutputStream(baos)){
-                oos.writeObject(cart);
-                oos.flush();
-            }
-            return baos.toByteArray();
-        } catch (IOException ignore) {
-            System.err.println(ignore.toString());
-        }
-        return null;
-    }
-
-    private Cart deserializeCart(byte[] array) {
-        try(ByteArrayInputStream bais = new ByteArrayInputStream(array)){
-            try(ObjectInput ois = new ObjectInputStream(bais)){
-                return (Cart) ois.readObject();
-            }
-        } catch (ClassNotFoundException | IOException ignore){
-            System.err.println(ignore.toString());
-        }
-        return null;
-    }
-
 
 }

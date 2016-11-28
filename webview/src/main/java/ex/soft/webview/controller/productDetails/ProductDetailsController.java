@@ -1,9 +1,12 @@
 package ex.soft.webview.controller.productDetails;
 
+import ex.soft.domain.form.CartForm;
 import ex.soft.domain.model.Cart;
 import ex.soft.domain.model.Phone;
-import ex.soft.service.ProductServiceImpl;
 import ex.soft.service.api.CartService;
+import ex.soft.service.api.ProductService;
+import ex.soft.service.form.CartFormService;
+import ex.soft.webview.controller.cart.CartController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,15 +24,22 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class ProductDetailsController {
 
+    private static final String PRODUCT_ATTRIBUTE = "product";
+
     @Autowired
-    private ProductServiceImpl phoneService;
+    private ProductService<Phone> phoneService;
 
     @Autowired
     private CartService cartService;
 
-    @ModelAttribute("cart")
-    public Cart showCartWidget(HttpSession session) {
-        return cartService.getCart(session);
+    @Autowired
+    private CartFormService cartFormService;
+
+
+    @ModelAttribute(CartController.CART_FORM_ATTRIBUTE)
+    public CartForm showCartWidget(HttpSession session) {
+        Cart cart = cartService.getCart(session);
+        return cartFormService.mapCartToCartForm(cart);
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -37,7 +47,7 @@ public class ProductDetailsController {
                                       @RequestParam("key")   Long productId,
                                                              Model modelView ){
         Phone product = phoneService.getProduct(productId);
-        modelView.addAttribute("product", product);
+        modelView.addAttribute(PRODUCT_ATTRIBUTE, product);
         return "productDetails/productDetails";
     }
 

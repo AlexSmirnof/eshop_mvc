@@ -24,12 +24,12 @@
     <context:property-placeholder properties-ref="prices"/>
 
 
-    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
-        <property name="converters">
-            <set>
-                <bean class="ex.soft.webview.converter.cart.StringToLongConverter"/>
-            </set>
-        </property>
-    </bean>
+    <!--<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">-->
+        <!--<property name="converters">-->
+            <!--<set>-->
+                <!--<bean class="ex.soft.webview.converter.cart.StringToLongConverter"/>-->
+            <!--</set>-->
+        <!--</property>-->
+    <!--</bean>-->
 
 </beans>
